@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Taste of Baku Admin + Menu</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --panel-2: #1f2937;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --line: #334155;
+      --accent: #f59e0b;
+      --danger: #ef4444;
+      --success: #22c55e;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #020617 0%, #111827 100%);
+      color: var(--text);
+    }
+
+    .container {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .hero {
+      padding: 28px 0 16px;
+    }
+
+    h1, h2, h3 { margin: 0 0 12px; }
+    p { color: var(--muted); }
+
+    .row {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      background: rgba(17, 24, 39, 0.92);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+
+    .span-12 { grid-column: span 12; }
+    .span-8 { grid-column: span 8; }
+    .span-4 { grid-column: span 4; }
+    .span-6 { grid-column: span 6; }
+
+    @media (max-width: 900px) {
+      .span-8, .span-4, .span-6 { grid-column: span 12; }
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(245, 158, 11, 0.12);
+      color: #fbbf24;
+      font-size: 12px;
+      border: 1px solid rgba(245, 158, 11, 0.25);
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 11px 14px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .btn-main {
+      background: var(--accent);
+      color: #111827;
+    }
+
+    .btn-dark {
+      background: var(--panel-2);
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.15);
+      color: #fecaca;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-success {
+      background: rgba(34, 197, 94, 0.15);
+      color: #bbf7d0;
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: #0b1220;
+      color: var(--text);
+      padding: 11px 12px;
+      border-radius: 10px;
+      outline: none;
+    }
+
+    textarea { min-height: 100px; resize: vertical; }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: #cbd5e1;
+      margin-bottom: 7px;
+      font-weight: 700;
+    }
+
+    .field { margin-bottom: 14px; }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 16px;
+      margin-top: 14px;
+    }
+
+    .item-card {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .item-card img {
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+      display: block;
+      background: #0b1220;
+    }
+
+    .item-body {
+      padding: 14px;
+    }
+
+    .price {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fde68a;
+    }
+
+    .meta {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin: 8px 0;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 5px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: rgba(148, 163, 184, 0.15);
+      color: #cbd5e1;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    .tag.special {
+      background: rgba(245, 158, 11, 0.18);
+      color: #fde68a;
+      border-color: rgba(245, 158, 11, 0.35);
+    }
+
+    .hidden { display: none !important; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    @media (max-width: 700px) {
+      .stats { grid-template-columns: 1fr; }
+    }
+
+    .stat {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px;
+    }
+
+    .stat small { color: var(--muted); display: block; margin-bottom: 5px; }
+    .stat strong { font-size: 24px; }
+
+    .notice {
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      color: #bfdbfe;
+      margin-bottom: 14px;
+    }
+
+    .status {
+      margin-top: 10px;
+      min-height: 20px;
+      font-size: 14px;
+      color: #cbd5e1;
+    }
+
+    .status.error { color: #fca5a5; }
+    .status.ok { color: #86efac; }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+    }
+
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 12px 10px;
+      text-align: left;
+      vertical-align: top;
+      font-size: 14px;
+    }
+
+    th { color: #cbd5e1; }
+    .muted { color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="hero">
+      <div class="topbar">
+        <div class="brand">
+          <span class="pill">GitHub Pages + Supabase Starter</span>
+          <h1>Taste of Baku</h1>
+          <p>Public menu and gallery with simple admin login, image upload, add/edit/delete items.</p>
+        </div>
+        <div class="actions">
+          <button id="showPublicBtn" class="btn-dark">Public Menu</button>
+          <button id="showAdminBtn" class="btn-main">Admin Panel</button>
+          <button id="logoutBtn" class="btn-danger hidden">Logout</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="publicView" class="row">
+      <div class="span-12 card">
+        <div class="stats">
+          <div class="stat">
+            <small>Total items</small>
+            <strong id="totalItems">0</strong>
+          </div>
+          <div class="stat">
+            <small>Available now</small>
+            <strong id="availableItems">0</strong>
+          </div>
+          <div class="stat">
+            <small>Chef specials</small>
+            <strong id="specialItems">0</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="span-12 card">
+        <div class="topbar">
+          <div>
+            <h2>Menu</h2>
+            <p>Customers can see products here.</p>
+          </div>
+          <div class="actions" style="min-width:280px; width:320px; max-width:100%;">
+            <input id="searchInput" placeholder="Search item name or category" />
+          </div>
+        </div>
+        <div id="menuGrid" class="menu-grid"></div>
+      </div>
+    </section>
+
+    <section id="adminView" class="row hidden">
+      <div class="span-4 card">
+        <h2>Admin Login</h2>
+        <div class="notice">
+          Use your Supabase Auth email and password. After login you can upload photos and manage products.
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" type="email" placeholder="admin@email.com" />
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input id="password" type="password" placeholder="Password" />
+        </div>
+        <div class="actions">
+          <button id="loginBtn" class="btn-main">Login</button>
+        </div>
+        <div id="loginStatus" class="status"></div>
+      </div>
+
+      <div class="span-8 card hidden" id="adminPanel">
+        <div class="topbar">
+          <div>
+            <h2>Add or Edit Menu Item</h2>
+            <p>Nothing in your old Excel is touched. This is your website system.</p>
+          </div>
+          <div class="actions">
+            <button id="clearFormBtn" class="btn-dark">Clear Form</button>
+          </div>
+        </div>
+
+        <form id="itemForm">
+          <input type="hidden" id="itemId" />
+          <div class="row">
+            <div class="span-6">
+              <div class="field">
+                <label for="itemName">Item Name</label>
+                <input id="itemName" required placeholder="Chicken Qutab" />
+              </div>
+            </div>
+            <div class="span-6">
+              <div class="field">
+                <label for="itemCategory">Category</label>
+                <input id="itemCategory" placeholder="Snack / Main / Dessert" />
+              </div>
+            </div>
+            <div class="span-6">
+              <div class="field">
+                <label for="itemPrice">Price (AED)</label>
+                <input id="itemPrice" type="number" min="0" step="0.01" required placeholder="25" />
+              </div>
+            </div>
+            <div class="span-6">
+              <div class="field">
+                <label for="itemImage">Photo</label>
+                <input id="itemImage" type="file" accept="image/*" />
+              </div>
+            </div>
+            <div class="span-12">
+              <div class="field">
+                <label for="itemDescription">Description</label>
+                <textarea id="itemDescription" placeholder="Short item description"></textarea>
+              </div>
+            </div>
+            <div class="span-6">
+              <div class="field">
+                <label for="itemAvailable">Availability</label>
+                <select id="itemAvailable">
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
+              </div>
+            </div>
+            <div class="span-6">
+              <div class="field">
+                <label for="itemSpecial">Chef Special</label>
+                <select id="itemSpecial">
+                  <option value="false">No</option>
+                  <option value="true">Yes</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="actions">
+            <button type="submit" class="btn-main">Save Item</button>
+          </div>
+          <div id="formStatus" class="status"></div>
+        </form>
+      </div>
+
+      <div class="span-12 card hidden" id="adminTableWrap">
+        <div class="topbar">
+          <div>
+            <h2>Manage Items</h2>
+            <p>Edit or delete from here.</p>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Available</th>
+                <th>Special</th>
+                <th>Image</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="adminTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+    // =============================
+    // 1) PUT YOUR SUPABASE DETAILS HERE
+    // =============================
+    const SUPABASE_URL = 'PASTE_YOUR_SUPABASE_URL_HERE';
+    const SUPABASE_ANON_KEY = 'PASTE_YOUR_SUPABASE_ANON_KEY_HERE';
+
+    // This starter expects:
+    // table name: menu_items
+    // storage bucket: menu-images
+
+    if (SUPABASE_URL.includes('PASTE_') || SUPABASE_ANON_KEY.includes('PASTE_')) {
+      console.warn('Add your Supabase URL and anon key first.');
+    }
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const publicView = document.getElementById('publicView');
+    const adminView = document.getElementById('adminView');
+    const adminPanel = document.getElementById('adminPanel');
+    const adminTableWrap = document.getElementById('adminTableWrap');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const menuGrid = document.getElementById('menuGrid');
+    const adminTableBody = document.getElementById('adminTableBody');
+    const loginStatus = document.getElementById('loginStatus');
+    const formStatus = document.getElementById('formStatus');
+    const searchInput = document.getElementById('searchInput');
+
+    const itemForm = document.getElementById('itemForm');
+    const itemId = document.getElementById('itemId');
+    const itemName = document.getElementById('itemName');
+    const itemCategory = document.getElementById('itemCategory');
+    const itemPrice = document.getElementById('itemPrice');
+    const itemDescription = document.getElementById('itemDescription');
+    const itemAvailable = document.getElementById('itemAvailable');
+    const itemSpecial = document.getElementById('itemSpecial');
+    const itemImage = document.getElementById('itemImage');
+
+    const totalItems = document.getElementById('totalItems');
+    const availableItems = document.getElementById('availableItems');
+    const specialItems = document.getElementById('specialItems');
+
+    let allItems = [];
+    let currentSession = null;
+
+    document.getElementById('showPublicBtn').addEventListener('click', () => {
+      publicView.classList.remove('hidden');
+      adminView.classList.add('hidden');
+    });
+
+    document.getElementById('showAdminBtn').addEventListener('click', async () => {
+      publicView.classList.add('hidden');
+      adminView.classList.remove('hidden');
+      await checkSession();
+    });
+
+    document.getElementById('clearFormBtn').addEventListener('click', clearForm);
+    document.getElementById('loginBtn').addEventListener('click', login);
+    logoutBtn.addEventListener('click', logout);
+    itemForm.addEventListener('submit', saveItem);
+    searchInput.addEventListener('input', renderPublicItems);
+
+    async function checkSession() {
+      const { data } = await supabase.auth.getSession();
+      currentSession = data.session;
+      const loggedIn = !!currentSession;
+      adminPanel.classList.toggle('hidden', !loggedIn);
+      adminTableWrap.classList.toggle('hidden', !loggedIn);
+      logoutBtn.classList.toggle('hidden', !loggedIn);
+      if (loggedIn) {
+        loginStatus.textContent = 'Logged in.';
+        loginStatus.className = 'status ok';
+        await loadAdminItems();
+      }
+    }
+
+    async function login() {
+      loginStatus.textContent = 'Logging in...';
+      loginStatus.className = 'status';
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        loginStatus.textContent = error.message;
+        loginStatus.className = 'status error';
+        return;
+      }
+      loginStatus.textContent = 'Login successful.';
+      loginStatus.className = 'status ok';
+      await checkSession();
+    }
+
+    async function logout() {
+      await supabase.auth.signOut();
+      currentSession = null;
+      adminPanel.classList.add('hidden');
+      adminTableWrap.classList.add('hidden');
+      logoutBtn.classList.add('hidden');
+      loginStatus.textContent = 'Logged out.';
+      loginStatus.className = 'status';
+    }
+
+    async function loadPublicItems() {
+      const { data, error } = await supabase
+        .from('menu_items')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        menuGrid.innerHTML = `<div class="card"><p>Could not load items yet. Add your Supabase details first.</p></div>`;
+        return;
+      }
+
+      allItems = data || [];
+      updateStats();
+      renderPublicItems();
+    }
+
+    function updateStats() {
+      totalItems.textContent = allItems.length;
+      availableItems.textContent = allItems.filter(i => i.available).length;
+      specialItems.textContent = allItems.filter(i => i.is_special).length;
+    }
+
+    function renderPublicItems() {
+      const q = searchInput.value.trim().toLowerCase();
+      const filtered = allItems.filter(item => {
+        const hay = `${item.name || ''} ${item.category || ''}`.toLowerCase();
+        return hay.includes(q);
+      });
+
+      if (!filtered.length) {
+        menuGrid.innerHTML = '<div class="card"><p>No items found.</p></div>';
+        return;
+      }
+
+      menuGrid.innerHTML = filtered.map(item => `
+        <div class="item-card">
+          <img src="${item.image_url || 'https://via.placeholder.com/600x400?text=No+Image'}" alt="${escapeHtml(item.name || '')}" />
+          <div class="item-body">
+            <div class="topbar" style="margin-bottom: 8px;">
+              <h3 style="margin:0;">${escapeHtml(item.name || '')}</h3>
+              <span class="price">AED ${Number(item.price || 0).toFixed(2)}</span>
+            </div>
+            <div class="meta">
+              ${item.category ? `<span class="tag">${escapeHtml(item.category)}</span>` : ''}
+              ${item.available ? '<span class="tag">Available</span>' : '<span class="tag">Not available</span>'}
+              ${item.is_special ? '<span class="tag special">Chef Special</span>' : ''}
+            </div>
+            <p>${escapeHtml(item.description || '')}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function loadAdminItems() {
+      const { data, error } = await supabase
+        .from('menu_items')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        adminTableBody.innerHTML = `<tr><td colspan="7">${escapeHtml(error.message)}</td></tr>`;
+        return;
+      }
+
+      adminTableBody.innerHTML = (data || []).map(item => `
+        <tr>
+          <td>${escapeHtml(item.name || '')}</td>
+          <td>${escapeHtml(item.category || '')}</td>
+          <td>AED ${Number(item.price || 0).toFixed(2)}</td>
+          <td>${item.available ? 'Yes' : 'No'}</td>
+          <td>${item.is_special ? 'Yes' : 'No'}</td>
+          <td>${item.image_url ? `<a href="${item.image_url}" target="_blank" rel="noopener">Open</a>` : '<span class="muted">No image</span>'}</td>
+          <td>
+            <div class="actions">
+              <button class="btn-dark" onclick='window.editItem(${JSON.stringify(safeForInline(item))})'>Edit</button>
+              <button class="btn-danger" onclick="window.deleteItem('${item.id}')">Delete</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    window.editItem = (item) => {
+      itemId.value = item.id || '';
+      itemName.value = item.name || '';
+      itemCategory.value = item.category || '';
+      itemPrice.value = item.price || '';
+      itemDescription.value = item.description || '';
+      itemAvailable.value = String(!!item.available);
+      itemSpecial.value = String(!!item.is_special);
+      formStatus.textContent = 'Editing item: ' + (item.name || '');
+      formStatus.className = 'status';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.deleteItem = async (id) => {
+      if (!confirm('Delete this item?')) return;
+      const { error } = await supabase.from('menu_items').delete().eq('id', id);
+      if (error) {
+        alert(error.message);
+        return;
+      }
+      await refreshAll();
+    };
+
+    async function saveItem(e) {
+      e.preventDefault();
+      formStatus.textContent = 'Saving...';
+      formStatus.className = 'status';
+
+      let imageUrl = null;
+      const file = itemImage.files[0];
+
+      if (file) {
+        const extension = file.name.split('.').pop();
+        const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${extension}`;
+        const filePath = `menu/${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('menu-images')
+          .upload(filePath, file, { upsert: false });
+
+        if (uploadError) {
+          formStatus.textContent = uploadError.message;
+          formStatus.className = 'status error';
+          return;
+        }
+
+        const { data } = supabase.storage.from('menu-images').getPublicUrl(filePath);
+        imageUrl = data.publicUrl;
+      }
+
+      const payload = {
+        name: itemName.value.trim(),
+        category: itemCategory.value.trim(),
+        price: Number(itemPrice.value || 0),
+        description: itemDescription.value.trim(),
+        available: itemAvailable.value === 'true',
+        is_special: itemSpecial.value === 'true'
+      };
+
+      if (imageUrl) payload.image_url = imageUrl;
+
+      const existingId = itemId.value.trim();
+      let response;
+
+      if (existingId) {
+        response = await supabase.from('menu_items').update(payload).eq('id', existingId);
+      } else {
+        response = await supabase.from('menu_items').insert([payload]);
+      }
+
+      if (response.error) {
+        formStatus.textContent = response.error.message;
+        formStatus.className = 'status error';
+        return;
+      }
+
+      formStatus.textContent = existingId ? 'Item updated.' : 'Item created.';
+      formStatus.className = 'status ok';
+      clearForm();
+      await refreshAll();
+    }
+
+    function clearForm() {
+      itemId.value = '';
+      itemForm.reset();
+      itemAvailable.value = 'true';
+      itemSpecial.value = 'false';
+      formStatus.textContent = '';
+      formStatus.className = 'status';
+    }
+
+    async function refreshAll() {
+      await loadPublicItems();
+      if (currentSession) await loadAdminItems();
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    function safeForInline(item) {
+      return {
+        id: item.id,
+        name: item.name,
+        category: item.category,
+        price: item.price,
+        description: item.description,
+        available: item.available,
+        is_special: item.is_special
+      };
+    }
+
+    // Keep auth in sync
+    supabase.auth.onAuthStateChange(async (_event, session) => {
+      currentSession = session;
+      const loggedIn = !!session;
+      adminPanel.classList.toggle('hidden', !loggedIn);
+      adminTableWrap.classList.toggle('hidden', !loggedIn);
+      logoutBtn.classList.toggle('hidden', !loggedIn);
+      if (loggedIn) await loadAdminItems();
+    });
+
+    // First load
+    await checkSession();
+    await loadPublicItems();
+  </script>
+
+  <!--
+    ============================
+    SUPABASE SETUP YOU NEED
+    ============================
+
+    1) Create a project in Supabase.
+
+    2) Create this table in SQL Editor:
+
+    create extension if not exists pgcrypto;
+
+    create table if not exists public.menu_items (
+      id uuid primary key default gen_random_uuid(),
+      name text not null,
+      category text,
+      description text,
+      price numeric(10,2) not null default 0,
+      available boolean not null default true,
+      is_special boolean not null default false,
+      image_url text,
+      created_at timestamptz not null default now()
+    );
+
+    3) Turn on Row Level Security and use these policies:
+
+    alter table public.menu_items enable row level security;
+
+    create policy "Public can read menu items"
+    on public.menu_items for select
+    using (true);
+
+    create policy "Authenticated users can insert menu items"
+    on public.menu_items for insert
+    to authenticated
+    with check (true);
+
+    create policy "Authenticated users can update menu items"
+    on public.menu_items for update
+    to authenticated
+    using (true)
+    with check (true);
+
+    create policy "Authenticated users can delete menu items"
+    on public.menu_items for delete
+    to authenticated
+    using (true);
+
+    4) Create a public storage bucket called: menu-images
+
+    5) Storage policies:
+
+    create policy "Public can view menu images"
+    on storage.objects for select
+    using (bucket_id = 'menu-images');
+
+    create policy "Authenticated can upload menu images"
+    on storage.objects for insert
+    to authenticated
+    with check (bucket_id = 'menu-images');
+
+    create policy "Authenticated can update menu images"
+    on storage.objects for update
+    to authenticated
+    using (bucket_id = 'menu-images')
+    with check (bucket_id = 'menu-images');
+
+    create policy "Authenticated can delete menu images"
+    on storage.objects for delete
+    to authenticated
+    using (bucket_id = 'menu-images');
+
+    6) In Authentication, create your admin user.
+
+    7) In Project Settings > API, copy URL and anon key into this file.
+
+    8) Save this file as index.html and upload to GitHub repo.
+
+    9) Enable GitHub Pages in repo settings.
+
+    10) Open the site, click Admin Panel, log in, and start adding items.
+  -->
+</body>
+</html>
