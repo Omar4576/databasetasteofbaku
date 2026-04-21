@@ -1,834 +1,1100 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Taste of Baku Admin + Menu</title>
-  <style>
-    :root {
-      --bg: #0f172a;
-      --panel: #111827;
-      --panel-2: #1f2937;
-      --text: #f8fafc;
-      --muted: #94a3b8;
-      --line: #334155;
-      --accent: #f59e0b;
-      --danger: #ef4444;
-      --success: #22c55e;
-    }
-
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: linear-gradient(180deg, #020617 0%, #111827 100%);
-      color: var(--text);
-    }
-
-    .container {
-      max-width: 1150px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-
-    .hero {
-      padding: 28px 0 16px;
-    }
-
-    h1, h2, h3 { margin: 0 0 12px; }
-    p { color: var(--muted); }
-
-    .row {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 16px;
-    }
-
-    .card {
-      background: rgba(17, 24, 39, 0.92);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 18px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-    }
-
-    .span-12 { grid-column: span 12; }
-    .span-8 { grid-column: span 8; }
-    .span-4 { grid-column: span 4; }
-    .span-6 { grid-column: span 6; }
-
-    @media (max-width: 900px) {
-      .span-8, .span-4, .span-6 { grid-column: span 12; }
-    }
-
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 14px;
-    }
-
-    .brand {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .pill {
-      display: inline-block;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: rgba(245, 158, 11, 0.12);
-      color: #fbbf24;
-      font-size: 12px;
-      border: 1px solid rgba(245, 158, 11, 0.25);
-    }
-
-    .actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    button {
-      border: none;
-      border-radius: 10px;
-      padding: 11px 14px;
-      cursor: pointer;
-      font-weight: 700;
-    }
-
-    .btn-main {
-      background: var(--accent);
-      color: #111827;
-    }
-
-    .btn-dark {
-      background: var(--panel-2);
-      color: var(--text);
-      border: 1px solid var(--line);
-    }
-
-    .btn-danger {
-      background: rgba(239, 68, 68, 0.15);
-      color: #fecaca;
-      border: 1px solid rgba(239, 68, 68, 0.3);
-    }
-
-    .btn-success {
-      background: rgba(34, 197, 94, 0.15);
-      color: #bbf7d0;
-      border: 1px solid rgba(34, 197, 94, 0.3);
-    }
-
-    input, textarea, select {
-      width: 100%;
-      border: 1px solid var(--line);
-      background: #0b1220;
-      color: var(--text);
-      padding: 11px 12px;
-      border-radius: 10px;
-      outline: none;
-    }
-
-    textarea { min-height: 100px; resize: vertical; }
-
-    label {
-      display: block;
-      font-size: 13px;
-      color: #cbd5e1;
-      margin-bottom: 7px;
-      font-weight: 700;
-    }
-
-    .field { margin-bottom: 14px; }
-
-    .menu-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 16px;
-      margin-top: 14px;
-    }
-
-    .item-card {
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      overflow: hidden;
-    }
-
-    .item-card img {
-      width: 100%;
-      height: 190px;
-      object-fit: cover;
-      display: block;
-      background: #0b1220;
-    }
-
-    .item-body {
-      padding: 14px;
-    }
-
-    .price {
-      font-size: 18px;
-      font-weight: 700;
-      color: #fde68a;
-    }
-
-    .meta {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      flex-wrap: wrap;
-      margin: 8px 0;
-    }
-
-    .tag {
-      display: inline-block;
-      padding: 5px 8px;
-      border-radius: 999px;
-      font-size: 12px;
-      background: rgba(148, 163, 184, 0.15);
-      color: #cbd5e1;
-      border: 1px solid rgba(148, 163, 184, 0.2);
-    }
-
-    .tag.special {
-      background: rgba(245, 158, 11, 0.18);
-      color: #fde68a;
-      border-color: rgba(245, 158, 11, 0.35);
-    }
-
-    .hidden { display: none !important; }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-    }
-
-    @media (max-width: 700px) {
-      .stats { grid-template-columns: 1fr; }
-    }
-
-    .stat {
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 14px;
-    }
-
-    .stat small { color: var(--muted); display: block; margin-bottom: 5px; }
-    .stat strong { font-size: 24px; }
-
-    .notice {
-      padding: 12px 14px;
-      border-radius: 12px;
-      background: rgba(59, 130, 246, 0.1);
-      border: 1px solid rgba(59, 130, 246, 0.25);
-      color: #bfdbfe;
-      margin-bottom: 14px;
-    }
-
-    .status {
-      margin-top: 10px;
-      min-height: 20px;
-      font-size: 14px;
-      color: #cbd5e1;
-    }
-
-    .status.error { color: #fca5a5; }
-    .status.ok { color: #86efac; }
-
-    .table-wrap {
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 12px;
-    }
-
-    th, td {
-      border-bottom: 1px solid var(--line);
-      padding: 12px 10px;
-      text-align: left;
-      vertical-align: top;
-      font-size: 14px;
-    }
-
-    th { color: #cbd5e1; }
-    .muted { color: var(--muted); }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Taste of Baku</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+:root{--bg:#0a0a0b;--bg2:#111113;--bg3:#1a1a1d;--bg4:#222226;--border:#2a2a2f;--accent:#d4a843;--accent2:#f0c760;--red:#e05555;--green:#4ec97a;--blue:#5b9bd5;--muted:#888;--text:#e8e6e2;--white:#fff}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-size:14px}
+/* LAYOUT */
+.app{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:240px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.main{flex:1;overflow-y:auto;overflow-x:hidden}
+/* LOGO */
+.logo{padding:20px 18px 16px;border-bottom:1px solid var(--border)}
+.logo h1{font-size:15px;font-weight:700;color:var(--accent);letter-spacing:.3px}
+.logo p{font-size:11px;color:var(--muted);margin-top:2px}
+/* NAV */
+.nav{padding:8px 0;flex:1}
+.nav-sect{font-size:10px;font-weight:600;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;padding:14px 18px 4px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 18px;cursor:pointer;font-size:13px;color:var(--muted);border-left:3px solid transparent;transition:all .15s;user-select:none}
+.nav-item:hover{color:var(--text);background:var(--bg3)}
+.nav-item.active{color:var(--accent);border-left-color:var(--accent);background:rgba(212,168,67,.07)}
+.nav-item .ni{font-size:15px;width:18px;text-align:center}
+/* PAGES */
+.page{display:none;padding:24px}
+.page.active{display:block}
+.ph{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:12px;flex-wrap:wrap}
+.ph-left h2{font-size:20px;font-weight:700;color:var(--white)}
+.ph-left p{font-size:12px;color:var(--muted);margin-top:3px}
+/* BUTTONS */
+.btn{padding:8px 16px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-family:'Inter',sans-serif;font-weight:500;transition:all .15s;white-space:nowrap}
+.btn-primary{background:var(--accent);color:#000}
+.btn-primary:hover{background:var(--accent2)}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.btn-ghost:hover{color:var(--text);border-color:var(--text)}
+.btn-sm{padding:5px 10px;font-size:12px}
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:20px}
+.stat{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px}
+.stat .sl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+.stat .sv{font-size:22px;font-weight:700;margin-top:6px;line-height:1}
+.stat .ss{font-size:11px;color:var(--muted);margin-top:4px}
+.stat.green .sv{color:var(--green)}
+.stat.red .sv{color:var(--red)}
+.stat.gold .sv{color:var(--accent)}
+.stat.blue .sv{color:var(--blue)}
+/* CARD */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:16px}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px}
+.card-head h3{font-size:13px;font-weight:600}
+.card-body{padding:0}
+/* FILTERS */
+.filters{display:flex;gap:6px;flex-wrap:wrap;padding:10px 16px;border-bottom:1px solid var(--border)}
+.fb{padding:4px 12px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:12px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
+.fb:hover{color:var(--text)}
+.fb.on{background:var(--accent);color:#000;border-color:var(--accent)}
+/* SEARCH */
+.search-wrap{padding:10px 16px;border-bottom:1px solid var(--border)}
+.search-wrap input{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:8px;font-size:13px;font-family:'Inter',sans-serif;outline:none}
+.search-wrap input:focus{border-color:var(--accent)}
+/* TABLE */
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{padding:9px 14px;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;font-weight:600}
+tr{border-bottom:1px solid var(--border)}
+tr:last-child{border-bottom:none}
+tr:hover{background:rgba(255,255,255,.02)}
+td{padding:9px 14px;font-size:13px;vertical-align:middle}
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:500;white-space:nowrap}
+.b-talabat{background:rgba(255,120,0,.15);color:#ff8c00}
+.b-deliveroo{background:rgba(0,200,130,.15);color:#00c882}
+.b-careem{background:rgba(40,180,40,.15);color:#28c828}
+.b-keeta{background:rgba(80,150,220,.15);color:var(--blue)}
+.b-whatsapp{background:rgba(37,211,102,.15);color:#25d366}
+.b-noon{background:rgba(240,220,0,.15);color:#f0dc00}
+.b-tob{background:rgba(212,168,67,.15);color:var(--accent)}
+.b-q{background:rgba(180,100,220,.15);color:#c464e0}
+.b-income{background:rgba(78,201,122,.1);color:var(--green)}
+.b-expense{background:rgba(224,85,85,.1);color:var(--red)}
+/* MODAL */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:center;justify-content:center;padding:16px}
+.overlay.open{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto}
+.modal h3{font-size:17px;font-weight:700;margin-bottom:18px;color:var(--white)}
+.fg{margin-bottom:14px}
+.fg label{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:5px}
+.fg input,.fg select,.fg textarea{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:8px;font-size:13px;font-family:'Inter',sans-serif;outline:none}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--accent)}
+.fg textarea{height:72px;resize:vertical}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+/* PROFIT/LOSS colors */
+.profit{color:var(--green)}
+.loss{color:var(--red)}
+/* ICONS */
+.icon-btn{width:28px;height:28px;border:1px solid var(--border);border-radius:6px;background:transparent;cursor:pointer;font-size:12px;display:inline-flex;align-items:center;justify-content:center;color:var(--muted);transition:all .15s}
+.icon-btn:hover{color:var(--text);border-color:var(--text)}
+.icon-btn.del:hover{color:var(--red);border-color:var(--red)}
+/* STOCK GRID */
+.sg{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:16px}
+.si{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px}
+.si .sn{font-size:13px;font-weight:600}
+.si .sm{font-size:11px;color:var(--muted);margin-top:2px}
+.si .sq{font-size:20px;font-weight:700;color:var(--accent);margin:8px 0 4px}
+.bar{width:100%;height:5px;background:var(--bg4);border-radius:3px;overflow:hidden;margin:4px 0}
+.bar-f{height:100%;border-radius:3px}
+.si-photo{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:6px;border:1px solid var(--border);margin-bottom:8px;background:var(--bg3)}
+.no-photo{width:100%;aspect-ratio:16/9;border-radius:6px;border:1px dashed var(--border);display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--border);margin-bottom:8px;cursor:pointer}
+.no-photo:hover{border-color:var(--accent);color:var(--accent)}
+/* PHOTO */
+.pu{border:2px dashed var(--border);border-radius:8px;padding:20px;text-align:center;cursor:pointer;transition:.2s}
+.pu:hover{border-color:var(--accent);background:rgba(212,168,67,.04)}
+.pu p{font-size:13px;color:var(--muted)}
+.pu input{display:none}
+.pg{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.pi{position:relative;width:64px;height:64px;border-radius:6px;overflow:hidden;border:1px solid var(--border)}
+.pi img{width:100%;height:100%;object-fit:cover}
+.pi .pd{position:absolute;top:2px;right:2px;background:rgba(0,0,0,.7);border:none;border-radius:50%;width:18px;height:18px;cursor:pointer;font-size:11px;color:var(--red);display:flex;align-items:center;justify-content:center}
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px 16px;font-size:13px;z-index:300;opacity:0;transform:translateY(8px);transition:all .25s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+/* SYNC STATUS */
+.sync-bar{padding:8px 16px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);margin-top:auto}
+.sync-bar.ok{color:var(--green)}
+.sync-bar.err{color:var(--red)}
+/* HAMBURGER for mobile */
+.ham{display:none;position:fixed;top:12px;left:12px;z-index:150;width:36px;height:36px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;cursor:pointer;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.ham span{width:18px;height:2px;background:var(--text);border-radius:2px;transition:.2s}
+.mob-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99}
+/* DELIVERY SETTINGS */
+.ds{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:16px}
+.ds h4{font-size:13px;font-weight:600;color:var(--accent);margin-bottom:14px}
+.dg{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.di label{font-size:11px;color:var(--muted);display:block;margin-bottom:4px}
+.di input{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:7px 10px;border-radius:7px;font-size:13px;font-family:'Inter',sans-serif;outline:none}
+/* GIST SYNC */
+.gist-section{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:16px}
+.gist-section h4{font-size:13px;font-weight:600;color:var(--accent);margin-bottom:8px}
+.gist-section p{font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.5}
+.gist-section input{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:8px;font-size:12px;font-family:'Inter',sans-serif;outline:none;margin-bottom:8px}
+.gist-section input:focus{border-color:var(--accent)}
+/* MOBILE */
+@media(max-width:720px){
+  .ham{display:flex}
+  .sidebar{position:fixed;left:-260px;top:0;bottom:0;z-index:100;transition:left .25s;width:240px}
+  .sidebar.open{left:0}
+  .mob-overlay.open{display:block}
+  .main{margin-left:0}
+  .page{padding:16px;padding-top:56px}
+  .stats{grid-template-columns:1fr 1fr}
+  .stat .sv{font-size:18px}
+  .fg2{grid-template-columns:1fr}
+  .ph{flex-direction:column;align-items:flex-start}
+  table{font-size:12px}
+  th,td{padding:8px 10px}
+  .sg{grid-template-columns:1fr 1fr}
+}
+@media(max-width:400px){
+  .stats{grid-template-columns:1fr}
+  .sg{grid-template-columns:1fr}
+}
+.empty{text-align:center;padding:36px;color:var(--muted)}
+.empty .ei{font-size:32px;margin-bottom:8px}
+.row-actions{display:flex;gap:5px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:720px){.two-col{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
-  <div class="container">
-    <section class="hero">
-      <div class="topbar">
-        <div class="brand">
-          <span class="pill">GitHub Pages + Supabase Starter</span>
-          <h1>Taste of Baku</h1>
-          <p>Public menu and gallery with simple admin login, image upload, add/edit/delete items.</p>
-        </div>
-        <div class="actions">
-          <button id="showPublicBtn" class="btn-dark">Public Menu</button>
-          <button id="showAdminBtn" class="btn-main">Admin Panel</button>
-          <button id="logoutBtn" class="btn-danger hidden">Logout</button>
-        </div>
-      </div>
-    </section>
+<div class="app">
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+  <div class="logo">
+    <h1>🍽 Taste of Baku</h1>
+    <p>Business Manager</p>
+  </div>
+  <nav class="nav">
+    <div class="nav-sect">Overview</div>
+    <div class="nav-item active" onclick="go('dashboard',this)"><span class="ni">📊</span><span>Dashboard</span></div>
+    <div class="nav-sect">Operations</div>
+    <div class="nav-item" onclick="go('orders',this)"><span class="ni">🧾</span><span>Orders</span></div>
+    <div class="nav-item" onclick="go('kitchen',this)"><span class="ni">🛒</span><span>Kitchen Needs</span></div>
+    <div class="nav-item" onclick="go('stock',this)"><span class="ni">📦</span><span>Stock</span></div>
+    <div class="nav-sect">Finance</div>
+    <div class="nav-item" onclick="go('bank',this)"><span class="ni">💳</span><span>Bank & Expenses</span></div>
+    <div class="nav-item" onclick="go('receipts',this)"><span class="ni">🗂️</span><span>Receipts</span></div>
+    <div class="nav-item" onclick="go('pnl',this)"><span class="ni">📈</span><span>Profit & Loss</span></div>
+    <div class="nav-sect">Settings</div>
+    <div class="nav-item" onclick="go('settings',this)"><span class="ni">⚙️</span><span>Settings</span></div>
+  </nav>
+  <div class="sync-bar" id="sync-bar">● Local only</div>
+</div>
 
-    <section id="publicView" class="row">
-      <div class="span-12 card">
-        <div class="stats">
-          <div class="stat">
-            <small>Total items</small>
-            <strong id="totalItems">0</strong>
-          </div>
-          <div class="stat">
-            <small>Available now</small>
-            <strong id="availableItems">0</strong>
-          </div>
-          <div class="stat">
-            <small>Chef specials</small>
-            <strong id="specialItems">0</strong>
-          </div>
-        </div>
-      </div>
+<!-- HAMBURGER -->
+<div class="ham" id="ham" onclick="toggleSidebar()"><span></span><span></span><span></span></div>
+<div class="mob-overlay" id="mob-overlay" onclick="toggleSidebar()"></div>
 
-      <div class="span-12 card">
-        <div class="topbar">
-          <div>
-            <h2>Menu</h2>
-            <p>Customers can see products here.</p>
-          </div>
-          <div class="actions" style="min-width:280px; width:320px; max-width:100%;">
-            <input id="searchInput" placeholder="Search item name or category" />
-          </div>
-        </div>
-        <div id="menuGrid" class="menu-grid"></div>
-      </div>
-    </section>
+<!-- MAIN -->
+<div class="main">
 
-    <section id="adminView" class="row hidden">
-      <div class="span-4 card">
-        <h2>Admin Login</h2>
-        <div class="notice">
-          Use your Supabase Auth email and password. After login you can upload photos and manage products.
-        </div>
-        <div class="field">
-          <label for="email">Email</label>
-          <input id="email" type="email" placeholder="admin@email.com" />
-        </div>
-        <div class="field">
-          <label for="password">Password</label>
-          <input id="password" type="password" placeholder="Password" />
-        </div>
-        <div class="actions">
-          <button id="loginBtn" class="btn-main">Login</button>
-        </div>
-        <div id="loginStatus" class="status"></div>
-      </div>
+<!-- DASHBOARD -->
+<div class="page active" id="page-dashboard">
+  <div class="ph"><div class="ph-left"><h2>Dashboard</h2><p id="dash-sub">Taste of Baku · Apr 2026</p></div></div>
+  <div class="stats" id="dash-stats"></div>
+  <div class="two-col">
+    <div class="card"><div class="card-head"><h3>App Performance</h3></div><div class="tbl-wrap" id="app-perf"></div></div>
+    <div class="card"><div class="card-head"><h3>Recent Orders</h3></div><div class="tbl-wrap" id="recent-orders"></div></div>
+  </div>
+</div>
 
-      <div class="span-8 card hidden" id="adminPanel">
-        <div class="topbar">
-          <div>
-            <h2>Add or Edit Menu Item</h2>
-            <p>Nothing in your old Excel is touched. This is your website system.</p>
-          </div>
-          <div class="actions">
-            <button id="clearFormBtn" class="btn-dark">Clear Form</button>
-          </div>
-        </div>
+<!-- ORDERS -->
+<div class="page" id="page-orders">
+  <div class="ph">
+    <div class="ph-left"><h2>Orders</h2><p>All delivery orders — ToB & Qutab</p></div>
+    <button class="btn btn-primary" onclick="openModal('o-modal')">+ Add Order</button>
+  </div>
+  <div class="card">
+    <div class="filters" id="orders-filters"></div>
+    <div class="search-wrap"><input type="text" placeholder="Search orders, items, ID..." oninput="renderOrders(this.value)"></div>
+    <div class="card-head"><h3 id="orders-count">Orders</h3></div>
+    <div class="tbl-wrap">
+      <table><thead><tr><th>#</th><th>Date</th><th>Time</th><th>App</th><th>Rest.</th><th>Items</th><th>Gross (AED)</th><th>Net (AED)</th><th>Order ID</th><th>Notes</th><th></th></tr></thead>
+      <tbody id="orders-body"></tbody></table>
+    </div>
+  </div>
+</div>
 
-        <form id="itemForm">
-          <input type="hidden" id="itemId" />
-          <div class="row">
-            <div class="span-6">
-              <div class="field">
-                <label for="itemName">Item Name</label>
-                <input id="itemName" required placeholder="Chicken Qutab" />
-              </div>
-            </div>
-            <div class="span-6">
-              <div class="field">
-                <label for="itemCategory">Category</label>
-                <input id="itemCategory" placeholder="Snack / Main / Dessert" />
-              </div>
-            </div>
-            <div class="span-6">
-              <div class="field">
-                <label for="itemPrice">Price (AED)</label>
-                <input id="itemPrice" type="number" min="0" step="0.01" required placeholder="25" />
-              </div>
-            </div>
-            <div class="span-6">
-              <div class="field">
-                <label for="itemImage">Photo</label>
-                <input id="itemImage" type="file" accept="image/*" />
-              </div>
-            </div>
-            <div class="span-12">
-              <div class="field">
-                <label for="itemDescription">Description</label>
-                <textarea id="itemDescription" placeholder="Short item description"></textarea>
-              </div>
-            </div>
-            <div class="span-6">
-              <div class="field">
-                <label for="itemAvailable">Availability</label>
-                <select id="itemAvailable">
-                  <option value="true">Yes</option>
-                  <option value="false">No</option>
-                </select>
-              </div>
-            </div>
-            <div class="span-6">
-              <div class="field">
-                <label for="itemSpecial">Chef Special</label>
-                <select id="itemSpecial">
-                  <option value="false">No</option>
-                  <option value="true">Yes</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div class="actions">
-            <button type="submit" class="btn-main">Save Item</button>
-          </div>
-          <div id="formStatus" class="status"></div>
-        </form>
-      </div>
+<!-- KITCHEN -->
+<div class="page" id="page-kitchen">
+  <div class="ph">
+    <div class="ph-left"><h2>Kitchen Needs</h2><p>Lazimli eşyalar — what to buy</p></div>
+    <button class="btn btn-primary" onclick="openModal('k-modal')">+ Add Item</button>
+  </div>
+  <div class="card">
+    <div class="filters">
+      <button class="fb on" onclick="setKF('all',this)">All</button>
+      <button class="fb" onclick="setKF('pending',this)">🔴 Need to Buy</button>
+      <button class="fb" onclick="setKF('bought',this)">✅ Bought</button>
+    </div>
+    <div class="tbl-wrap">
+      <table><thead><tr><th>Item</th><th>Qty</th><th>When</th><th>Cost (AED)</th><th>Status</th><th>Photo</th><th></th></tr></thead>
+      <tbody id="kitchen-body"></tbody></table>
+    </div>
+  </div>
+</div>
 
-      <div class="span-12 card hidden" id="adminTableWrap">
-        <div class="topbar">
-          <div>
-            <h2>Manage Items</h2>
-            <p>Edit or delete from here.</p>
-          </div>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Price</th>
-                <th>Available</th>
-                <th>Special</th>
-                <th>Image</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="adminTableBody"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
+<!-- STOCK -->
+<div class="page" id="page-stock">
+  <div class="ph">
+    <div class="ph-left"><h2>Kitchen Stock</h2><p>What we have · what we need</p></div>
+    <button class="btn btn-primary" onclick="openModal('s-modal')">+ Add Item</button>
+  </div>
+  <div class="filters" style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;margin-bottom:12px">
+    <button class="fb on" onclick="setSF('all',this)">All</button>
+    <button class="fb" onclick="setSF('low',this)">⚠️ Low Stock</button>
+    <button class="fb" onclick="setSF('ok',this)">✅ In Stock</button>
+  </div>
+  <div class="sg" id="stock-grid"></div>
+</div>
+
+<!-- BANK -->
+<div class="page" id="page-bank">
+  <div class="ph">
+    <div class="ph-left"><h2>Bank & Expenses</h2><p>Business card transactions</p></div>
+    <button class="btn btn-primary" onclick="openModal('tx-modal')">+ Add Transaction</button>
+  </div>
+  <div class="stats" id="bank-stats"></div>
+  <div class="card">
+    <div class="filters">
+      <button class="fb on" onclick="setTF('all',this)">All</button>
+      <button class="fb" onclick="setTF('income',this)">💚 Capital In</button>
+      <button class="fb" onclick="setTF('expense',this)">🔴 Expenses</button>
+    </div>
+    <div class="tbl-wrap">
+      <table><thead><tr><th>Date</th><th>Time</th><th>Description</th><th>Amount (AED)</th><th>Type</th><th>Category</th><th>Paid By</th><th></th></tr></thead>
+      <tbody id="bank-body"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- RECEIPTS -->
+<div class="page" id="page-receipts">
+  <div class="ph">
+    <div class="ph-left"><h2>Receipts</h2><p>Upload & track all receipts</p></div>
+    <button class="btn btn-primary" onclick="openModal('r-modal')">+ Add Receipt</button>
+  </div>
+  <div class="card">
+    <div class="tbl-wrap">
+      <table><thead><tr><th>Date</th><th>Vendor</th><th>Amount</th><th>Category</th><th>Photos</th><th>Notes</th><th></th></tr></thead>
+      <tbody id="receipts-body"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- P&L -->
+<div class="page" id="page-pnl">
+  <div class="ph"><div class="ph-left"><h2>Profit & Loss</h2><p>Full financial summary</p></div></div>
+  <div class="stats" id="pnl-stats"></div>
+  <div class="two-col">
+    <div class="card"><div class="card-head"><h3>Revenue by App</h3></div><div class="tbl-wrap" id="pnl-rev"></div></div>
+    <div class="card"><div class="card-head"><h3>Expenses by Category</h3></div><div class="tbl-wrap" id="pnl-exp"></div></div>
+  </div>
+  <div class="card"><div class="card-head"><h3>Daily Revenue</h3></div><div class="tbl-wrap" id="pnl-daily"></div></div>
+</div>
+
+<!-- SETTINGS -->
+<div class="page" id="page-settings">
+  <div class="ph"><div class="ph-left"><h2>Settings</h2><p>Commission rates & data sync</p></div></div>
+  <div class="ds">
+    <h4>⚙️ App Commission Rates</h4>
+    <div class="dg">
+      <div class="di"><label>Talabat ToB (%)</label><input type="number" id="pct-talabat-tob" value="32" min="0" max="100" onchange="saveSettings()"></div>
+      <div class="di"><label>Talabat Q (%)</label><input type="number" id="pct-talabat-q" value="27" min="0" max="100" onchange="saveSettings()"></div>
+      <div class="di"><label>Deliveroo (%)</label><input type="number" id="pct-deliveroo" value="30" min="0" max="100" onchange="saveSettings()"></div>
+      <div class="di"><label>Careem (%)</label><input type="number" id="pct-careem" value="25" min="0" max="100" onchange="saveSettings()"></div>
+      <div class="di"><label>Keeta (%)</label><input type="number" id="pct-keeta" value="30" min="0" max="100" onchange="saveSettings()"></div>
+      <div class="di"><label>Noon (%)</label><input type="number" id="pct-noon" value="25" min="0" max="100" onchange="saveSettings()"></div>
+      <div class="di"><label>WhatsApp (%)</label><input type="number" id="pct-whatsapp" value="0" min="0" max="100" onchange="saveSettings()"></div>
+    </div>
+    <p style="margin-top:12px;font-size:11px;color:var(--muted)">Changes apply instantly to all P&L calculations.</p>
   </div>
 
-  <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-
-    // =============================
-    // 1) PUT YOUR SUPABASE DETAILS HERE
-    // =============================
-    const SUPABASE_URL = 'PASTE_YOUR_SUPABASE_URL_HERE';
-    const SUPABASE_ANON_KEY = 'PASTE_YOUR_SUPABASE_ANON_KEY_HERE';
-
-    // This starter expects:
-    // table name: menu_items
-    // storage bucket: menu-images
-
-    if (SUPABASE_URL.includes('PASTE_') || SUPABASE_ANON_KEY.includes('PASTE_')) {
-      console.warn('Add your Supabase URL and anon key first.');
-    }
-
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    const publicView = document.getElementById('publicView');
-    const adminView = document.getElementById('adminView');
-    const adminPanel = document.getElementById('adminPanel');
-    const adminTableWrap = document.getElementById('adminTableWrap');
-    const logoutBtn = document.getElementById('logoutBtn');
-    const menuGrid = document.getElementById('menuGrid');
-    const adminTableBody = document.getElementById('adminTableBody');
-    const loginStatus = document.getElementById('loginStatus');
-    const formStatus = document.getElementById('formStatus');
-    const searchInput = document.getElementById('searchInput');
-
-    const itemForm = document.getElementById('itemForm');
-    const itemId = document.getElementById('itemId');
-    const itemName = document.getElementById('itemName');
-    const itemCategory = document.getElementById('itemCategory');
-    const itemPrice = document.getElementById('itemPrice');
-    const itemDescription = document.getElementById('itemDescription');
-    const itemAvailable = document.getElementById('itemAvailable');
-    const itemSpecial = document.getElementById('itemSpecial');
-    const itemImage = document.getElementById('itemImage');
-
-    const totalItems = document.getElementById('totalItems');
-    const availableItems = document.getElementById('availableItems');
-    const specialItems = document.getElementById('specialItems');
-
-    let allItems = [];
-    let currentSession = null;
-
-    document.getElementById('showPublicBtn').addEventListener('click', () => {
-      publicView.classList.remove('hidden');
-      adminView.classList.add('hidden');
-    });
-
-    document.getElementById('showAdminBtn').addEventListener('click', async () => {
-      publicView.classList.add('hidden');
-      adminView.classList.remove('hidden');
-      await checkSession();
-    });
-
-    document.getElementById('clearFormBtn').addEventListener('click', clearForm);
-    document.getElementById('loginBtn').addEventListener('click', login);
-    logoutBtn.addEventListener('click', logout);
-    itemForm.addEventListener('submit', saveItem);
-    searchInput.addEventListener('input', renderPublicItems);
-
-    async function checkSession() {
-      const { data } = await supabase.auth.getSession();
-      currentSession = data.session;
-      const loggedIn = !!currentSession;
-      adminPanel.classList.toggle('hidden', !loggedIn);
-      adminTableWrap.classList.toggle('hidden', !loggedIn);
-      logoutBtn.classList.toggle('hidden', !loggedIn);
-      if (loggedIn) {
-        loginStatus.textContent = 'Logged in.';
-        loginStatus.className = 'status ok';
-        await loadAdminItems();
-      }
-    }
-
-    async function login() {
-      loginStatus.textContent = 'Logging in...';
-      loginStatus.className = 'status';
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
-
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) {
-        loginStatus.textContent = error.message;
-        loginStatus.className = 'status error';
-        return;
-      }
-      loginStatus.textContent = 'Login successful.';
-      loginStatus.className = 'status ok';
-      await checkSession();
-    }
-
-    async function logout() {
-      await supabase.auth.signOut();
-      currentSession = null;
-      adminPanel.classList.add('hidden');
-      adminTableWrap.classList.add('hidden');
-      logoutBtn.classList.add('hidden');
-      loginStatus.textContent = 'Logged out.';
-      loginStatus.className = 'status';
-    }
-
-    async function loadPublicItems() {
-      const { data, error } = await supabase
-        .from('menu_items')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        menuGrid.innerHTML = `<div class="card"><p>Could not load items yet. Add your Supabase details first.</p></div>`;
-        return;
-      }
-
-      allItems = data || [];
-      updateStats();
-      renderPublicItems();
-    }
-
-    function updateStats() {
-      totalItems.textContent = allItems.length;
-      availableItems.textContent = allItems.filter(i => i.available).length;
-      specialItems.textContent = allItems.filter(i => i.is_special).length;
-    }
-
-    function renderPublicItems() {
-      const q = searchInput.value.trim().toLowerCase();
-      const filtered = allItems.filter(item => {
-        const hay = `${item.name || ''} ${item.category || ''}`.toLowerCase();
-        return hay.includes(q);
-      });
-
-      if (!filtered.length) {
-        menuGrid.innerHTML = '<div class="card"><p>No items found.</p></div>';
-        return;
-      }
-
-      menuGrid.innerHTML = filtered.map(item => `
-        <div class="item-card">
-          <img src="${item.image_url || 'https://via.placeholder.com/600x400?text=No+Image'}" alt="${escapeHtml(item.name || '')}" />
-          <div class="item-body">
-            <div class="topbar" style="margin-bottom: 8px;">
-              <h3 style="margin:0;">${escapeHtml(item.name || '')}</h3>
-              <span class="price">AED ${Number(item.price || 0).toFixed(2)}</span>
-            </div>
-            <div class="meta">
-              ${item.category ? `<span class="tag">${escapeHtml(item.category)}</span>` : ''}
-              ${item.available ? '<span class="tag">Available</span>' : '<span class="tag">Not available</span>'}
-              ${item.is_special ? '<span class="tag special">Chef Special</span>' : ''}
-            </div>
-            <p>${escapeHtml(item.description || '')}</p>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    async function loadAdminItems() {
-      const { data, error } = await supabase
-        .from('menu_items')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        adminTableBody.innerHTML = `<tr><td colspan="7">${escapeHtml(error.message)}</td></tr>`;
-        return;
-      }
-
-      adminTableBody.innerHTML = (data || []).map(item => `
-        <tr>
-          <td>${escapeHtml(item.name || '')}</td>
-          <td>${escapeHtml(item.category || '')}</td>
-          <td>AED ${Number(item.price || 0).toFixed(2)}</td>
-          <td>${item.available ? 'Yes' : 'No'}</td>
-          <td>${item.is_special ? 'Yes' : 'No'}</td>
-          <td>${item.image_url ? `<a href="${item.image_url}" target="_blank" rel="noopener">Open</a>` : '<span class="muted">No image</span>'}</td>
-          <td>
-            <div class="actions">
-              <button class="btn-dark" onclick='window.editItem(${JSON.stringify(safeForInline(item))})'>Edit</button>
-              <button class="btn-danger" onclick="window.deleteItem('${item.id}')">Delete</button>
-            </div>
-          </td>
-        </tr>
-      `).join('');
-    }
-
-    window.editItem = (item) => {
-      itemId.value = item.id || '';
-      itemName.value = item.name || '';
-      itemCategory.value = item.category || '';
-      itemPrice.value = item.price || '';
-      itemDescription.value = item.description || '';
-      itemAvailable.value = String(!!item.available);
-      itemSpecial.value = String(!!item.is_special);
-      formStatus.textContent = 'Editing item: ' + (item.name || '');
-      formStatus.className = 'status';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-
-    window.deleteItem = async (id) => {
-      if (!confirm('Delete this item?')) return;
-      const { error } = await supabase.from('menu_items').delete().eq('id', id);
-      if (error) {
-        alert(error.message);
-        return;
-      }
-      await refreshAll();
-    };
-
-    async function saveItem(e) {
-      e.preventDefault();
-      formStatus.textContent = 'Saving...';
-      formStatus.className = 'status';
-
-      let imageUrl = null;
-      const file = itemImage.files[0];
-
-      if (file) {
-        const extension = file.name.split('.').pop();
-        const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${extension}`;
-        const filePath = `menu/${fileName}`;
-
-        const { error: uploadError } = await supabase.storage
-          .from('menu-images')
-          .upload(filePath, file, { upsert: false });
-
-        if (uploadError) {
-          formStatus.textContent = uploadError.message;
-          formStatus.className = 'status error';
-          return;
-        }
-
-        const { data } = supabase.storage.from('menu-images').getPublicUrl(filePath);
-        imageUrl = data.publicUrl;
-      }
-
-      const payload = {
-        name: itemName.value.trim(),
-        category: itemCategory.value.trim(),
-        price: Number(itemPrice.value || 0),
-        description: itemDescription.value.trim(),
-        available: itemAvailable.value === 'true',
-        is_special: itemSpecial.value === 'true'
-      };
-
-      if (imageUrl) payload.image_url = imageUrl;
-
-      const existingId = itemId.value.trim();
-      let response;
-
-      if (existingId) {
-        response = await supabase.from('menu_items').update(payload).eq('id', existingId);
-      } else {
-        response = await supabase.from('menu_items').insert([payload]);
-      }
-
-      if (response.error) {
-        formStatus.textContent = response.error.message;
-        formStatus.className = 'status error';
-        return;
-      }
-
-      formStatus.textContent = existingId ? 'Item updated.' : 'Item created.';
-      formStatus.className = 'status ok';
-      clearForm();
-      await refreshAll();
-    }
-
-    function clearForm() {
-      itemId.value = '';
-      itemForm.reset();
-      itemAvailable.value = 'true';
-      itemSpecial.value = 'false';
-      formStatus.textContent = '';
-      formStatus.className = 'status';
-    }
-
-    async function refreshAll() {
-      await loadPublicItems();
-      if (currentSession) await loadAdminItems();
-    }
-
-    function escapeHtml(value) {
-      return String(value)
-        .replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;')
-        .replaceAll("'", '&#039;');
-    }
-
-    function safeForInline(item) {
-      return {
-        id: item.id,
-        name: item.name,
-        category: item.category,
-        price: item.price,
-        description: item.description,
-        available: item.available,
-        is_special: item.is_special
-      };
-    }
-
-    // Keep auth in sync
-    supabase.auth.onAuthStateChange(async (_event, session) => {
-      currentSession = session;
-      const loggedIn = !!session;
-      adminPanel.classList.toggle('hidden', !loggedIn);
-      adminTableWrap.classList.toggle('hidden', !loggedIn);
-      logoutBtn.classList.toggle('hidden', !loggedIn);
-      if (loggedIn) await loadAdminItems();
-    });
-
-    // First load
-    await checkSession();
-    await loadPublicItems();
-  </script>
-
-  <!--
-    ============================
-    SUPABASE SETUP YOU NEED
-    ============================
-
-    1) Create a project in Supabase.
-
-    2) Create this table in SQL Editor:
-
-    create extension if not exists pgcrypto;
-
-    create table if not exists public.menu_items (
-      id uuid primary key default gen_random_uuid(),
-      name text not null,
-      category text,
-      description text,
-      price numeric(10,2) not null default 0,
-      available boolean not null default true,
-      is_special boolean not null default false,
-      image_url text,
-      created_at timestamptz not null default now()
-    );
-
-    3) Turn on Row Level Security and use these policies:
-
-    alter table public.menu_items enable row level security;
-
-    create policy "Public can read menu items"
-    on public.menu_items for select
-    using (true);
-
-    create policy "Authenticated users can insert menu items"
-    on public.menu_items for insert
-    to authenticated
-    with check (true);
-
-    create policy "Authenticated users can update menu items"
-    on public.menu_items for update
-    to authenticated
-    using (true)
-    with check (true);
-
-    create policy "Authenticated users can delete menu items"
-    on public.menu_items for delete
-    to authenticated
-    using (true);
-
-    4) Create a public storage bucket called: menu-images
-
-    5) Storage policies:
-
-    create policy "Public can view menu images"
-    on storage.objects for select
-    using (bucket_id = 'menu-images');
-
-    create policy "Authenticated can upload menu images"
-    on storage.objects for insert
-    to authenticated
-    with check (bucket_id = 'menu-images');
-
-    create policy "Authenticated can update menu images"
-    on storage.objects for update
-    to authenticated
-    using (bucket_id = 'menu-images')
-    with check (bucket_id = 'menu-images');
-
-    create policy "Authenticated can delete menu images"
-    on storage.objects for delete
-    to authenticated
-    using (bucket_id = 'menu-images');
-
-    6) In Authentication, create your admin user.
-
-    7) In Project Settings > API, copy URL and anon key into this file.
-
-    8) Save this file as index.html and upload to GitHub repo.
-
-    9) Enable GitHub Pages in repo settings.
-
-    10) Open the site, click Admin Panel, log in, and start adding items.
-  -->
+  <div class="gist-section">
+    <h4>☁️ Cross-Device Sync (GitHub Gist)</h4>
+    <p>Sync your data across phone, laptop, any device — free forever. Create a GitHub account → Settings → Developer Settings → Personal Access Tokens → Generate token (check "gist" scope). Paste it below.</p>
+    <input type="text" id="gist-token" placeholder="GitHub Personal Access Token (ghp_...)" oninput="saveGistConfig()">
+    <input type="text" id="gist-id" placeholder="Gist ID (leave blank to auto-create on first push)" oninput="saveGistConfig()">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+      <button class="btn btn-primary btn-sm" onclick="pushToGist()">⬆️ Push to Cloud</button>
+      <button class="btn btn-ghost btn-sm" onclick="pullFromGist()">⬇️ Pull from Cloud</button>
+    </div>
+    <p id="gist-status" style="font-size:11px;color:var(--muted);margin-top:8px"></p>
+  </div>
+
+  <div class="ds">
+    <h4>💾 Local Backup</h4>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-ghost btn-sm" onclick="exportJSON()">📤 Export JSON</button>
+      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('import-file').click()">📥 Import JSON</button>
+      <input type="file" id="import-file" accept=".json" style="display:none" onchange="importJSON(event)">
+    </div>
+  </div>
+</div>
+
+</div><!-- end main -->
+</div><!-- end app -->
+
+<!-- MODALS -->
+
+<!-- Order Modal -->
+<div class="overlay" id="o-modal">
+<div class="modal">
+  <h3 id="o-title">Add Order</h3>
+  <div class="fg2">
+    <div class="fg"><label>Date</label><input type="date" id="o-date"></div>
+    <div class="fg"><label>Time</label><input type="text" id="o-time" placeholder="18:30"></div>
+  </div>
+  <div class="fg2">
+    <div class="fg"><label>App</label>
+      <select id="o-app">
+        <option>Talabat</option><option>Deliveroo</option><option>Careem</option><option>Keeta</option><option>Noon</option><option>Whatsapp</option>
+      </select>
+    </div>
+    <div class="fg"><label>Restaurant</label>
+      <select id="o-rest"><option value="ToB">Taste of Baku (ToB)</option><option value="Q">Qutab (Q)</option></select>
+    </div>
+  </div>
+  <div class="fg2">
+    <div class="fg"><label>Gross Amount (AED)</label><input type="number" id="o-amount" placeholder="0" step="0.01"></div>
+    <div class="fg"><label>Order ID</label><input type="text" id="o-oid" placeholder="App order ID"></div>
+  </div>
+  <div class="fg2">
+    <div class="fg"><label>Status</label>
+      <select id="o-status"><option value="completed">Completed</option><option value="complaint">Complaint</option><option value="cancelled">Cancelled</option></select>
+    </div>
+    <div class="fg"><label>Repeat Customer</label>
+      <select id="o-repeat"><option value="">First time</option><option value="1">1x before</option><option value="2">2x before</option><option value="3+">3+ times</option></select>
+    </div>
+  </div>
+  <div class="fg"><label>Items</label><textarea id="o-items" placeholder="1x Dolma, 2x Qutab Meat..."></textarea></div>
+  <div class="fg"><label>Notes / Complaint</label><textarea id="o-notes" placeholder="Any issues..."></textarea></div>
+  <div class="modal-actions">
+    <button class="btn btn-ghost" onclick="closeModal('o-modal')">Cancel</button>
+    <button class="btn btn-primary" onclick="saveOrder()">Save Order</button>
+  </div>
+</div></div>
+
+<!-- Kitchen Modal -->
+<div class="overlay" id="k-modal">
+<div class="modal">
+  <h3>Kitchen Item</h3>
+  <div class="fg"><label>Item Name</label><input type="text" id="k-name" placeholder="e.g. Mixing bowls"></div>
+  <div class="fg2">
+    <div class="fg"><label>Qty</label><input type="number" id="k-qty" placeholder="1"></div>
+    <div class="fg"><label>When Needed</label><input type="date" id="k-when"></div>
+  </div>
+  <div class="fg2">
+    <div class="fg"><label>Est. Cost (AED)</label><input type="number" id="k-cost" placeholder="0"></div>
+    <div class="fg"><label>Status</label>
+      <select id="k-status"><option value="pending">Need to Buy</option><option value="bought">Bought</option></select>
+    </div>
+  </div>
+  <div class="fg"><label>Notes</label><textarea id="k-notes" placeholder="Size, specs, where to buy..."></textarea></div>
+  <div class="fg"><label>Photo</label>
+    <div class="pu" onclick="document.getElementById('k-photo-in').click()">
+      <p>📷 Click to upload</p>
+      <input type="file" id="k-photo-in" accept="image/*" multiple onchange="previewPhotos('k-photo-in','k-photos-preview')">
+    </div>
+    <div class="pg" id="k-photos-preview"></div>
+  </div>
+  <div class="modal-actions">
+    <button class="btn btn-ghost" onclick="closeModal('k-modal')">Cancel</button>
+    <button class="btn btn-primary" onclick="saveKitchen()">Save</button>
+  </div>
+</div></div>
+
+<!-- Stock Modal -->
+<div class="overlay" id="s-modal">
+<div class="modal">
+  <h3>Stock Item</h3>
+  <div class="fg"><label>Item Name</label><input type="text" id="s-name" placeholder="e.g. Lamb mince"></div>
+  <div class="fg2">
+    <div class="fg"><label>Current Qty</label><input type="number" id="s-qty" placeholder="0"></div>
+    <div class="fg"><label>Unit</label>
+      <select id="s-unit"><option>kg</option><option>g</option><option>L</option><option>pcs</option><option>boxes</option><option>bags</option><option>packs</option></select>
+    </div>
+  </div>
+  <div class="fg2">
+    <div class="fg"><label>Min Level (reorder)</label><input type="number" id="s-min" placeholder="0"></div>
+    <div class="fg"><label>Max Level (full)</label><input type="number" id="s-max" placeholder="0"></div>
+  </div>
+  <div class="fg2">
+    <div class="fg"><label>Cost/Unit (AED)</label><input type="number" id="s-cost" placeholder="0"></div>
+    <div class="fg"><label>Last Restocked</label><input type="date" id="s-restock"></div>
+  </div>
+  <div class="fg"><label>Photo</label>
+    <div class="pu" onclick="document.getElementById('s-photo-in').click()">
+      <p>📷 Upload photo</p>
+      <input type="file" id="s-photo-in" accept="image/*" onchange="previewPhotos('s-photo-in','s-photos-preview',1)">
+    </div>
+    <div class="pg" id="s-photos-preview"></div>
+  </div>
+  <div class="fg"><label>Notes</label><textarea id="s-notes" placeholder="Supplier, storage..."></textarea></div>
+  <div class="modal-actions">
+    <button class="btn btn-ghost" onclick="closeModal('s-modal')">Cancel</button>
+    <button class="btn btn-primary" onclick="saveStock()">Save</button>
+  </div>
+</div></div>
+
+<!-- Transaction Modal -->
+<div class="overlay" id="tx-modal">
+<div class="modal">
+  <h3>Add Transaction</h3>
+  <div class="fg2">
+    <div class="fg"><label>Date</label><input type="date" id="tx-date"></div>
+    <div class="fg"><label>Time</label><input type="text" id="tx-time" placeholder="—"></div>
+  </div>
+  <div class="fg"><label>Description</label><input type="text" id="tx-desc" placeholder="e.g. Lulu Hypermarket"></div>
+  <div class="fg2">
+    <div class="fg"><label>Amount (AED)</label><input type="number" id="tx-amt" placeholder="0" step="0.01"></div>
+    <div class="fg"><label>Type</label>
+      <select id="tx-type"><option value="expense">Expense (−)</option><option value="income">Capital In (+)</option></select>
+    </div>
+  </div>
+  <div class="fg2">
+    <div class="fg"><label>Category</label>
+      <select id="tx-cat">
+        <option>Groceries</option><option>Packaging</option><option>Transport</option><option>App Fees</option>
+        <option>Kitchen Equipment</option><option>Rent / Kitchen</option><option>Flights</option>
+        <option>Salary / Transfer</option><option>Other</option>
+      </select>
+    </div>
+    <div class="fg"><label>Paid By</label>
+      <select id="tx-paid"><option value="">—</option><option>Kamil M</option><option>Ziya M</option><option>Teymur M</option><option>Business Card</option></select>
+    </div>
+  </div>
+  <div class="fg"><label>Notes</label><textarea id="tx-notes"></textarea></div>
+  <div class="modal-actions">
+    <button class="btn btn-ghost" onclick="closeModal('tx-modal')">Cancel</button>
+    <button class="btn btn-primary" onclick="saveTx()">Save</button>
+  </div>
+</div></div>
+
+<!-- Receipt Modal -->
+<div class="overlay" id="r-modal">
+<div class="modal">
+  <h3>Add Receipt</h3>
+  <div class="fg2">
+    <div class="fg"><label>Date</label><input type="date" id="r-date"></div>
+    <div class="fg"><label>Vendor</label><input type="text" id="r-vendor" placeholder="Lulu Hypermarket"></div>
+  </div>
+  <div class="fg2">
+    <div class="fg"><label>Amount (AED)</label><input type="number" id="r-amt" placeholder="0"></div>
+    <div class="fg"><label>Category</label>
+      <select id="r-cat"><option>Groceries</option><option>Packaging</option><option>Transport</option><option>Equipment</option><option>Other</option></select>
+    </div>
+  </div>
+  <div class="fg"><label>Notes</label><textarea id="r-notes"></textarea></div>
+  <div class="fg"><label>Receipt Photos</label>
+    <div class="pu" onclick="document.getElementById('r-photo-in').click()">
+      <p>📷 Upload receipt photos</p>
+      <input type="file" id="r-photo-in" accept="image/*" multiple onchange="previewPhotos('r-photo-in','r-photos-preview')">
+    </div>
+    <div class="pg" id="r-photos-preview"></div>
+  </div>
+  <div class="modal-actions">
+    <button class="btn btn-ghost" onclick="closeModal('r-modal')">Cancel</button>
+    <button class="btn btn-primary" onclick="saveReceipt()">Save</button>
+  </div>
+</div></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ==================== DATA ====================
+const DEFAULT = {
+  settings:{talabatTob:32,talabatQ:27,deliveroo:30,careem:25,keeta:30,noon:25,whatsapp:0},
+  orders:[
+    {id:1,date:"2026-04-13",time:"15:46",app:"Talabat",rest:"ToB",amount:106,orderId:"3564536928",items:"1x Dolma, 1x Blicnik crepe 3pcs",notes:"",status:"completed",repeat:""},
+    {id:2,date:"2026-04-13",time:"18:51",app:"Talabat",rest:"Q",amount:90,orderId:"3564872408",items:"3x Qutab Meat, 3x Qutab Greens",notes:"",status:"completed",repeat:""},
+    {id:3,date:"2026-04-13",time:"20:51",app:"Talabat",rest:"Q",amount:120,orderId:"3565150901",items:"2x Qutab Meat 2x Qutab Greens 2x Qutab cheese 2x Qutab Pumpkin",notes:"",status:"completed",repeat:""},
+    {id:4,date:"2026-04-13",time:"18:46",app:"Deliveroo",rest:"ToB",amount:149,orderId:"6788",items:"1x Russian Salad, 1x Tandoor Bread, 1x Kufta Bozbash, 1x Vinaigrette salad",notes:"",status:"completed",repeat:""},
+    {id:5,date:"2026-04-14",time:"17:29",app:"Talabat",rest:"ToB",amount:109,orderId:"3566590973",items:"1x Pirojki patato 3pcs, 1x russian salad, 1x blicnkin with meet crepes 3pcs, 1x fanta 330ml",notes:"",status:"completed",repeat:""},
+    {id:6,date:"2026-04-14",time:"21:22",app:"Talabat",rest:"ToB",amount:104,orderId:"3567097707",items:"1x Blinchik with cheese 3pcs, 1x kufta bozbash",notes:"",status:"completed",repeat:""},
+    {id:7,date:"2026-04-14",time:"18:11",app:"Careem",rest:"Q",amount:42,orderId:"155139936",items:"1x Meat qutab, 1x cheese qutab, 1x greens qutab, 1x pumpkin qutab",notes:"",status:"completed",repeat:"1"},
+    {id:8,date:"2026-04-14",time:"19:52",app:"Careem",rest:"Q",amount:77,orderId:"155146555",items:"1x Protein combo, 1x hommade ayran",notes:"",status:"completed",repeat:"1"},
+    {id:9,date:"2026-04-14",time:"20:56",app:"Deliveroo",rest:"Q",amount:102,orderId:"8553",items:"1x Qutab Greens, 1x Qutab Meat, 1x Tandoor Dolma",notes:"",status:"completed",repeat:""},
+    {id:10,date:"2026-04-14",time:"21:02",app:"Deliveroo",rest:"Q",amount:98,orderId:"5416",items:"3x Qutab Meat, 3x Qutab Greens, 1x Tandoor Bread",notes:"",status:"completed",repeat:""},
+    {id:11,date:"2026-04-14",time:"19:29",app:"Deliveroo",rest:"ToB",amount:163,orderId:"1902",items:"1x Shepherds choban salad, 1x Kufta Bozbash, 1x Cabbage dolma stuffed rolls",notes:"",status:"completed",repeat:""},
+    {id:12,date:"2026-04-14",time:"21:21",app:"Deliveroo",rest:"ToB",amount:135,orderId:"3318",items:"1x Cabbage dolma stuffed rolls, 1x Azerbaijani Dovga, 1x Vinaigrette salad",notes:"",status:"completed",repeat:""},
+    {id:13,date:"2026-04-15",time:"13:32",app:"Talabat",rest:"ToB",amount:143,orderId:"3568070166",items:"1x Sabzi Plov with meat, 1x Dolma with fresh vine leaves",notes:"",status:"completed",repeat:""},
+    {id:14,date:"2026-04-15",time:"16:57",app:"Talabat",rest:"Q",amount:177,orderId:"3568419703",items:"1x Pirojki Meat 3pcs, 1x Pirojki patato 3pcs, 1x Vingret salad, 2x Qutab meat, 1x qutab cheese, 1x qutab pumpkin, 1x ovdug",notes:"",status:"completed",repeat:""},
+    {id:15,date:"2026-04-15",time:"18:02",app:"Talabat",rest:"ToB",amount:111,orderId:"3568538895",items:"1x Tomato and egg, 1x shepherds salad, 1x dushbara",notes:"",status:"completed",repeat:""},
+    {id:16,date:"2026-04-15",time:"18:19",app:"Talabat",rest:"ToB",amount:112,orderId:"3568571476",items:"1x Ash gara, 1x blicnkhik with meat 3pcs",notes:"",status:"completed",repeat:""},
+    {id:17,date:"2026-04-15",time:"20:15",app:"Talabat",rest:"ToB",amount:283,orderId:"3568825765",items:"1x Russian salad, 1x Traditional Dolma fresh vine leaves, 2x kufta bozbash, 1x blinchik with beef 3pcs",notes:"",status:"completed",repeat:""},
+    {id:18,date:"2026-04-15",time:"17:55",app:"Careem",rest:"ToB",amount:72.8,orderId:"155233384",items:"1x Sabzi Plov, 1x vinaigrette salad",notes:"",status:"completed",repeat:""},
+    {id:19,date:"2026-04-15",time:"20:33",app:"Deliveroo",rest:"ToB",amount:64,orderId:"6428",items:"1x Cabbage dolma stuffed rolls",notes:"",status:"completed",repeat:""},
+    {id:20,date:"2026-04-15",time:"15:41",app:"Deliveroo",rest:"Q",amount:124,orderId:"5081",items:"4x Dovga, 4x Qutab with meat",notes:"",status:"completed",repeat:""},
+    {id:21,date:"2026-04-16",time:"10:34",app:"Talabat",rest:"ToB",amount:126,orderId:"3569753402",items:"1x Azerbaijani dovga, 1x pirojki patato 3pcs, 1x blini crepes 3pcs, 1x greek salad",notes:"",status:"completed",repeat:""},
+    {id:22,date:"2026-04-16",time:"15:36",app:"Talabat",rest:"ToB",amount:101,orderId:"35702000312",items:"1x Russian salad, 1x Cabbage dolma",notes:"",status:"completed",repeat:""},
+    {id:23,date:"2026-04-16",time:"21:06",app:"Keeta",rest:"ToB",amount:115,orderId:"569",items:"1x Qutab meat, 1x blicnik meet 3pcs, 1x dolma",notes:"",status:"completed",repeat:""},
+    {id:24,date:"2026-04-16",time:"12:10",app:"Careem",rest:"Q",amount:32.2,orderId:"155295832",items:"1x cheese qutab 1x meat qutab 1x greens qutab",notes:"",status:"completed",repeat:"3+"},
+    {id:25,date:"2026-04-16",time:"17:18",app:"Careem",rest:"ToB",amount:47.6,orderId:"155323230",items:"1x Sabzi Plov",notes:"",status:"completed",repeat:"1"},
+    {id:26,date:"2026-04-16",time:"12:31",app:"Deliveroo",rest:"Q",amount:132,orderId:"1730",items:"2x Qutab meat, 2x Qutab greens, 1x tandoor dolma",notes:"",status:"completed",repeat:""},
+    {id:27,date:"2026-04-16",time:"18:23",app:"Deliveroo",rest:"Q",amount:95,orderId:"1150",items:"1x Lavangi Tandoor",notes:"",status:"completed",repeat:""},
+    {id:28,date:"2026-04-16",time:"16:02",app:"Deliveroo",rest:"ToB",amount:104,orderId:"9849",items:"1x greek salad, 1x kufta bozbash",notes:"",status:"completed",repeat:""},
+    {id:29,date:"2026-04-16",time:"19:26",app:"Deliveroo",rest:"ToB",amount:119,orderId:"5277",items:"1x green qutab, 1x pumpkin qutab, 1x meat qutab, 1x dolma",notes:"",status:"completed",repeat:""},
+    {id:30,date:"2026-04-17",time:"14:55",app:"Talabat",rest:"ToB",amount:125,orderId:"3572119843",items:"1x Chicken chigirtma, 1x okroshka, 1x pirojki patato 3pcs",notes:"",status:"completed",repeat:""},
+    {id:31,date:"2026-04-17",time:"16:02",app:"Talabat",rest:"ToB",amount:123,orderId:"3572250720",items:"1x Uzbek Plov, 2x Okroshka",notes:"",status:"completed",repeat:""},
+    {id:32,date:"2026-04-17",time:"16:17",app:"Talabat",rest:"Q",amount:100,orderId:"3572277877",items:"1x Classic qutab Combo, 1x Pirojki Patato 3pcs",notes:"",status:"completed",repeat:""},
+    {id:33,date:"2026-04-17",time:"18:54",app:"Talabat",rest:"ToB",amount:29,orderId:"3572590625",items:"1x shepherds choban salad, 1x blicnik with meet stuffed 3pcs",notes:"Complaint: no blinchik arrived with meat 3pcs",status:"complaint",repeat:""},
+    {id:34,date:"2026-04-17",time:"19:48",app:"Talabat",rest:"ToB",amount:132,orderId:"3572716357",items:"1x Russian salad, 1x Chicken Chighirtma, 1x okroshka",notes:"",status:"completed",repeat:""},
+    {id:35,date:"2026-04-17",time:"21:26",app:"Talabat",rest:"ToB",amount:95,orderId:"3572968426",items:"1x chicken tandoor levengi",notes:"",status:"completed",repeat:""},
+    {id:36,date:"2026-04-17",time:"21:44",app:"Talabat",rest:"Q",amount:120,orderId:"3573014343",items:"3x Pirojki Patato 3pcs, 1x dovga, 1x ayran",notes:"",status:"completed",repeat:""},
+    {id:37,date:"2026-04-17",time:"20:39",app:"Careem",rest:"Q",amount:64.4,orderId:"155452760",items:"1x Street combo, 1x Yogurt dovga",notes:"",status:"completed",repeat:"1"},
+    {id:38,date:"2026-04-17",time:"19:06",app:"Deliveroo",rest:"ToB",amount:94,orderId:"783",items:"2x Qutab Greens, 2x Qutab pumpkin, 2x Qutab Meat",notes:"",status:"completed",repeat:""},
+    {id:39,date:"2026-04-17",time:"20:15",app:"Deliveroo",rest:"ToB",amount:74,orderId:"6193",items:"2x Okroshka soup Sausage",notes:"",status:"completed",repeat:""},
+    {id:40,date:"2026-04-18",time:"13:25",app:"Deliveroo",rest:"Q",amount:116,orderId:"8529",items:"1x Dolma Tandoor, 1x Tandoor bread, 1x pirojki meat 3pcs",notes:"",status:"completed",repeat:""},
+    {id:41,date:"2026-04-18",time:"14:08",app:"Deliveroo",rest:"ToB",amount:232,orderId:"778",items:"1x Dushbara, 5x qutab with meat, 1x Tandoor Lavangi, 1x Tandoor bread",notes:"",status:"completed",repeat:""},
+    {id:42,date:"2026-04-18",time:"14:38",app:"Deliveroo",rest:"ToB",amount:109,orderId:"8683",items:"2x Qutab Herbs, 2x qutab meat, 1x dovga",notes:"",status:"completed",repeat:""},
+    {id:43,date:"2026-04-18",time:"17:19",app:"Deliveroo",rest:"ToB",amount:92,orderId:"3118",items:"2x Dovga, 1x Mashed patatos",notes:"",status:"completed",repeat:""},
+    {id:44,date:"2026-04-18",time:"10:49",app:"Talabat",rest:"ToB",amount:72,orderId:"3573769869",items:"1x Tomato and egg, 1x blinchik with beef 3pcs",notes:"",status:"completed",repeat:""},
+    {id:45,date:"2026-04-18",time:"10:58",app:"Talabat",rest:"ToB",amount:95,orderId:"3573778355",items:"1x Tandoor lavangi",notes:"",status:"completed",repeat:""},
+    {id:46,date:"2026-04-18",time:"12:51",app:"Talabat",rest:"Q",amount:164,orderId:"3573909343",items:"4x Qutab greens, 4x qutab meat, 2x qutab pumpkin, 2x tandoor bread",notes:"",status:"completed",repeat:""},
+    {id:47,date:"2026-04-18",time:"18:46",app:"Talabat",rest:"ToB",amount:173,orderId:"3574558507",items:"1x Greek salad, 1x pirojki meat 3pcs, 1x ayran, 1x lavangi",notes:"",status:"completed",repeat:""},
+    {id:48,date:"2026-04-19",time:"13:18",app:"Deliveroo",rest:"ToB",amount:46,orderId:"3790",items:"1x Tomato and egg with tandoor bread",notes:"",status:"completed",repeat:""},
+    {id:49,date:"2026-04-19",time:"14:11",app:"Deliveroo",rest:"ToB",amount:92,orderId:"4552",items:"1x Qutab Meat, 1x Qutab Herbs, 1x Qutab Pumpkin, 1x Dovga with tandoor",notes:"",status:"completed",repeat:""},
+    {id:50,date:"2026-04-19",time:"14:51",app:"Talabat",rest:"Q",amount:105,orderId:"3576052864",items:"1x Pirojki patato 3pcs, 2x qutab meat, 2x qutab greens, 1x dovga",notes:"",status:"completed",repeat:""},
+    {id:51,date:"2026-04-19",time:"15:34",app:"Talabat",rest:"Q",amount:85,orderId:"3576128231",items:"1x Classic Qutab combo, 1x Dovga",notes:"",status:"completed",repeat:""},
+    {id:52,date:"2026-04-19",time:"16:10",app:"Talabat",rest:"ToB",amount:60,orderId:"3576190252",items:"1x Pirojki patato 3pcs, 1x pirojki meat 3pcs",notes:"",status:"completed",repeat:""},
+    {id:53,date:"2026-04-19",time:"16:22",app:"Talabat",rest:"ToB",amount:94,orderId:"3576210619",items:"1x Dolma, 1x pirojki patato 3pcs",notes:"",status:"completed",repeat:""},
+    {id:54,date:"2026-04-19",time:"16:44",app:"Talabat",rest:"ToB",amount:72,orderId:"3576249700",items:"1x Tomato and egg, 1x dogramac",notes:"",status:"completed",repeat:""},
+    {id:55,date:"2026-04-19",time:"18:12",app:"Talabat",rest:"Q",amount:39,orderId:"3576413560",items:"1x Dovga, 1x Tandoor bread, 1x Qutab Cheese",notes:"",status:"completed",repeat:""},
+    {id:56,date:"2026-04-19",time:"14:42",app:"Careem",rest:"Q",amount:55,orderId:"155612426",items:"1x Street Combo",notes:"",status:"completed",repeat:"1"},
+    {id:57,date:"2026-04-19",time:"17:14",app:"Careem",rest:"Q",amount:43,orderId:"155628258",items:"2x Pumpkin Qutab, 1x ovdug",notes:"",status:"completed",repeat:"1"},
+    {id:58,date:"2026-04-19",time:"20:42",app:"Talabat",rest:"ToB",amount:37,orderId:"3576757407",items:"1x Russian salad, 1x Azerbaijani tandoor bread, 1x Pirojki patato 3pcs",notes:"",status:"completed",repeat:""},
+    {id:59,date:"2026-04-19",time:"21:30",app:"Talabat",rest:"ToB",amount:71,orderId:"3576882196",items:"1x Russian salad, 1x greek salad",notes:"",status:"completed",repeat:""},
+    {id:60,date:"2026-04-19",time:"19:12",app:"Deliveroo",rest:"Q",amount:171,orderId:"2486",items:"2x Qutab meat, 1x dushbere, 1x tandoor lavangi",notes:"",status:"completed",repeat:""},
+    {id:61,date:"2026-04-20",time:"10:47",app:"Talabat",rest:"ToB",amount:264,orderId:"3577601760",items:"2x Azerbaijani Tandoor bread, 1x dovga, 1x Dushbara, 4x qutab green and meat and pumpkin 1pc, 1x tandoor lavangi",notes:"",status:"completed",repeat:""},
+    {id:62,date:"2026-04-20",time:"11:02",app:"Talabat",rest:"Q",amount:24,orderId:"3577615741",items:"3x Tandoor bread",notes:"",status:"completed",repeat:""},
+    {id:63,date:"2026-04-20",time:"12:34",app:"Talabat",rest:"ToB",amount:234,orderId:"3577720656",items:"1x tandoor bread, 2x qutab, 1x vinegret salad, 2x ashgara",notes:"",status:"completed",repeat:""},
+    {id:64,date:"2026-04-20",time:"13:07",app:"Talabat",rest:"ToB",amount:104,orderId:"3577767171",items:"1x Rice pilaf with saffron, 1x chicken chigirtma, 2x azerbaijani tandoor bread, 1x coca cola 330ml",notes:"",status:"completed",repeat:""},
+    {id:65,date:"2026-04-20",time:"13:33",app:"Deliveroo",rest:"ToB",amount:172,orderId:"5474",items:"2x Qutab Meat, 2x Qutab Greens, 1x Tandoor, 1x Qutab",notes:"",status:"completed",repeat:""},
+    {id:66,date:"2026-04-19",time:"",app:"Whatsapp",rest:"ToB",amount:160,orderId:"",items:"1x Dovga tandoor, 1x Lavagi",notes:"",status:"completed",repeat:""},
+    {id:67,date:"2026-04-20",time:"13:04",app:"Talabat",rest:"Q",amount:39,orderId:"3577761832",items:"1x Dovga, 1x Tandoor bread, 1x Qutab Meat",notes:"",status:"completed",repeat:""},
+    {id:68,date:"2026-04-20",time:"14:18",app:"Talabat",rest:"ToB",amount:23,orderId:"3577879830",items:"1x Azerbaijani Tandoor Bread, 1x Dovga",notes:"",status:"completed",repeat:""},
+    {id:69,date:"2026-04-20",time:"14:33",app:"Talabat",rest:"ToB",amount:72,orderId:"3577904733",items:"1x Pirojki Patato 3pcs, 1x Blicnhik with Beef Stuffed Crepes 3pcs, 1x Azerbaijani Tandoor Bread",notes:"",status:"completed",repeat:""},
+    {id:70,date:"2026-04-20",time:"15:50",app:"Talabat",rest:"Q",amount:81,orderId:"3578033542",items:"1x Pirojki Patato 3pcs, 1x Pirojki Meat 3pcs, 1x Ovdug",notes:"",status:"completed",repeat:""},
+    {id:71,date:"2026-04-20",time:"12:01",app:"Deliveroo",rest:"Q",amount:69,orderId:"958",items:"1x Street combo, 1x Qutab Greens",notes:"",status:"completed",repeat:""},
+    {id:72,date:"2026-04-20",time:"11:13",app:"Deliveroo",rest:"ToB",amount:230,orderId:"7390",items:"1x dovga, 1x kufta bozbaash, 1x ashgara, 1x Russian salad",notes:"",status:"completed",repeat:""},
+    {id:73,date:"2026-04-20",time:"17:01",app:"Whatsapp",rest:"Q",amount:177,orderId:"",items:"2x Dovga, 1x Pirojki With patato 3pcs, 1x qutab greens, 1x tandoor lavangi, 1x tandoor bread",notes:"",status:"completed",repeat:""},
+    {id:74,date:"2026-04-20",time:"17:57",app:"Careem",rest:"Q",amount:32,orderId:"155729423",items:"2x cheese qutab",notes:"",status:"completed",repeat:"3+"},
+  ],
+  transactions:[
+    {id:1,date:"2026-04-01",time:"—",desc:"From KAMIL MANAFOV",amount:5650,type:"income",cat:"Salary / Transfer",paid:"Kamil M",notes:""},
+    {id:2,date:"2026-04-02",time:"—",desc:"From ZIYA BAGHIRLI",amount:6654,type:"income",cat:"Salary / Transfer",paid:"Ziya M",notes:""},
+    {id:3,date:"2026-04-03",time:"—",desc:"From ZIYA BAGHIRLI",amount:5788,type:"income",cat:"Salary / Transfer",paid:"Ziya M",notes:""},
+    {id:4,date:"2026-04-03",time:"—",desc:"From ZIYA BAGHIRLI",amount:1313,type:"income",cat:"Salary / Transfer",paid:"Ziya M",notes:""},
+    {id:5,date:"2026-04-04",time:"—",desc:"Flydubai",amount:5787.76,type:"expense",cat:"Flights",paid:"Business Card",notes:""},
+    {id:6,date:"2026-04-04",time:"—",desc:"Foreign exchange fee",amount:115.75,type:"expense",cat:"Other",paid:"Business Card",notes:""},
+    {id:7,date:"2026-04-05",time:"—",desc:"Talabat",amount:1313,type:"expense",cat:"App Fees",paid:"Business Card",notes:""},
+    {id:8,date:"2026-04-06",time:"—",desc:"Fusion Foodie Zone Kitchen LLC",amount:11287.5,type:"expense",cat:"Rent / Kitchen",paid:"Business Card",notes:""},
+    {id:9,date:"2026-04-11",time:"—",desc:"From KAMIL MANAFOV",amount:1010,type:"income",cat:"Salary / Transfer",paid:"Kamil M",notes:""},
+    {id:10,date:"2026-04-14",time:"—",desc:"Nownow",amount:39.31,type:"expense",cat:"Other",paid:"Business Card",notes:""},
+    {id:11,date:"2026-04-15",time:"—",desc:"Flydubai (app)",amount:2246.28,type:"expense",cat:"Flights",paid:"Business Card",notes:""},
+    {id:12,date:"2026-04-15",time:"—",desc:"From ZIYA BAGHIRLI",amount:2500,type:"income",cat:"Salary / Transfer",paid:"Ziya M",notes:""},
+    {id:13,date:"2026-04-16",time:"—",desc:"Gogetit technologies (transport)",amount:5.5,type:"expense",cat:"Transport",paid:"Business Card",notes:"Delivery WhatsApp"},
+    {id:14,date:"2026-04-16",time:"—",desc:"Gogetit technologies (transport)",amount:50,type:"expense",cat:"Transport",paid:"Business Card",notes:""},
+    {id:15,date:"2026-04-16",time:"—",desc:"Gogetit technologies (transport)",amount:20,type:"expense",cat:"Transport",paid:"Business Card",notes:""},
+    {id:16,date:"2026-04-16",time:"—",desc:"Lulu Hypermarket",amount:47.4,type:"expense",cat:"Groceries",paid:"Business Card",notes:""},
+    {id:17,date:"2026-04-16",time:"—",desc:"Lulu Hypermarket",amount:735.45,type:"expense",cat:"Groceries",paid:"Business Card",notes:""},
+    {id:18,date:"2026-04-17",time:"—",desc:"Al Braik Fruits LLC",amount:80,type:"expense",cat:"Groceries",paid:"Business Card",notes:""},
+    {id:19,date:"2026-04-17",time:"—",desc:"Hot Pack Packaging LLC (bank)",amount:55.5,type:"expense",cat:"Packaging",paid:"Business Card",notes:""},
+    {id:20,date:"2026-04-17",time:"—",desc:"Roaya Almustaqbal",amount:8,type:"expense",cat:"Other",paid:"Business Card",notes:""},
+    {id:21,date:"2026-04-17",time:"—",desc:"Lulu Hypermarket",amount:47.4,type:"expense",cat:"Groceries",paid:"Business Card",notes:""},
+    {id:22,date:"2026-04-17",time:"—",desc:"Lulu Hypermarket",amount:735.45,type:"expense",cat:"Groceries",paid:"Business Card",notes:""},
+    {id:23,date:"2026-04-18",time:"12:18",desc:"Lulu Hypermarket (groceries receipt)",amount:121.15,type:"expense",cat:"Groceries",paid:"Ziya M",notes:""},
+    {id:24,date:"2026-04-18",time:"—",desc:"Hotpack Packaging LLC (receipt)",amount:62.4,type:"expense",cat:"Packaging",paid:"Kamil M",notes:""},
+    {id:25,date:"2026-04-18",time:"22:23",desc:"ADCB Merchant – Vehicle Testing",amount:157.5,type:"expense",cat:"Transport",paid:"Kamil M",notes:""},
+    {id:26,date:"2026-04-19",time:"10:47",desc:"Lulu Hypermarket (groceries receipt)",amount:202,type:"expense",cat:"Groceries",paid:"",notes:""},
+    {id:27,date:"2026-04-18",time:"—",desc:"Network purchase (packet)",amount:25,type:"expense",cat:"Other",paid:"Ziya M",notes:""},
+  ],
+  kitchen:[
+    {id:1,name:"Cups",qty:"1",when:"2026-04-21",cost:10,status:"pending",notes:"Lulu",photos:[]},
+    {id:2,name:"yas salfetks",qty:"1",when:"2026-04-21",cost:10,status:"pending",notes:"Lulu",photos:[]},
+  ],
+  stock:[],receipts:[],
+  nextOrderId:75,nextTxId:28,nextKitchenId:3,nextStockId:1,nextReceiptId:1,
+  gist:{token:"",id:""}
+};
+
+let D = JSON.parse(localStorage.getItem('tob_v3')||'null')||JSON.parse(JSON.stringify(DEFAULT));
+// Merge gist config if missing
+if(!D.gist) D.gist={token:"",id:""};
+
+let editId=null, tempPhotos={};
+let ordersFilter='all', kitchenFilter='all', stockFilter='all', txFilter='all';
+
+function save(){localStorage.setItem('tob_v3',JSON.stringify(D))}
+
+// ==================== NAV ====================
+function go(page,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  el.classList.add('active');
+  render(page);
+  // close mobile sidebar
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('mob-overlay').classList.remove('open');
+}
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('mob-overlay').classList.toggle('open');
+}
+function render(p){
+  if(p==='dashboard') renderDash();
+  if(p==='orders') renderOrders();
+  if(p==='kitchen') renderKitchen();
+  if(p==='stock') renderStock();
+  if(p==='bank') renderBank();
+  if(p==='receipts') renderReceipts();
+  if(p==='pnl') renderPnL();
+  if(p==='settings') loadSettings();
+}
+
+// ==================== COMMISSIONS ====================
+function getPct(app, rest){
+  const s=D.settings, a=app.toLowerCase();
+  if(a==='talabat') return rest==='Q' ? s.talabatQ/100 : s.talabatTob/100;
+  if(a==='deliveroo') return s.deliveroo/100;
+  if(a==='careem') return s.careem/100;
+  if(a==='keeta') return s.keeta/100;
+  if(a==='noon') return s.noon/100;
+  return 0; // whatsapp
+}
+function net(o){return o.amount*(1-getPct(o.app,o.rest))}
+
+function fmtAED(n){
+  if(Number.isInteger(n)) return 'AED '+n;
+  return 'AED '+n.toFixed(2);
+}
+
+// ==================== DASHBOARD ====================
+function renderDash(){
+  const orders=D.orders.filter(o=>o.amount>0);
+  const gross=orders.reduce((s,o)=>s+o.amount,0);
+  const netRev=orders.reduce((s,o)=>s+net(o),0);
+  const exp=D.transactions.filter(t=>t.type==='expense').reduce((s,t)=>s+t.amount,0);
+  const pnl=netRev-exp;
+  const lowStock=D.stock.filter(s=>s.qty<=s.min).length;
+
+  document.getElementById('dash-stats').innerHTML=[
+    {l:'Total Orders',v:orders.length,s:'All apps combined',c:'blue'},
+    {l:'Gross Sales',v:fmtAED(gross),s:'Before commission',c:'gold'},
+    {l:'Net Revenue',v:fmtAED(Math.round(netRev*100)/100),s:'After app fees',c:'green'},
+    {l:'Total Expenses',v:fmtAED(exp),s:'All categories',c:'red'},
+    {l:'P&L (April)',v:(pnl>=0?'+':'')+fmtAED(Math.round(pnl*100)/100),s:'Net revenue − expenses',c:pnl>=0?'green':'red'},
+    {l:'Low Stock',v:lowStock,s:'Items need restocking',c:lowStock>0?'red':'green'},
+  ].map(s=>`<div class="stat ${s.c}"><div class="sl">${s.l}</div><div class="sv">${s.v}</div><div class="ss">${s.s}</div></div>`).join('');
+
+  // App performance
+  const apps=['Talabat','Deliveroo','Careem','Keeta','Noon','Whatsapp'];
+  const rows=apps.map(a=>{
+    const ao=orders.filter(o=>o.app===a);
+    if(!ao.length) return '';
+    const g=ao.reduce((s,o)=>s+o.amount,0);
+    const n=ao.reduce((s,o)=>s+net(o),0);
+    // show pct breakdown for talabat
+    let pctStr=a==='Talabat'?`${D.settings.talabatTob}%ToB/${D.settings.talabatQ}%Q`:(D.settings[a.toLowerCase()]||0)+'%';
+    return `<tr><td><span class="badge b-${a.toLowerCase()}">${a}</span></td><td>${ao.length}</td><td>${fmtAED(g)}</td><td style="color:var(--muted);font-size:11px">${pctStr}</td><td class="profit">${fmtAED(Math.round(n*100)/100)}</td></tr>`;
+  }).join('');
+  document.getElementById('app-perf').innerHTML=`<table><thead><tr><th>App</th><th>Orders</th><th>Gross</th><th>Fee</th><th>Net</th></tr></thead><tbody>${rows}</tbody></table>`;
+
+  const recent=[...D.orders].reverse().slice(0,10).filter(o=>o.amount>0);
+  document.getElementById('recent-orders').innerHTML=`<table><thead><tr><th>Date</th><th>App</th><th>Rest</th><th>AED</th></tr></thead><tbody>${recent.map(o=>`<tr><td>${o.date.slice(5)}</td><td><span class="badge b-${o.app.toLowerCase()}">${o.app}</span></td><td><span class="badge b-${o.rest.toLowerCase()}">${o.rest}</span></td><td>${o.amount}</td></tr>`).join('')}</tbody></table>`;
+}
+
+// ==================== ORDERS ====================
+function buildOrderFilters(){
+  const apps=['all','Talabat','Deliveroo','Careem','Keeta','Noon','Whatsapp','ToB','Q'];
+  document.getElementById('orders-filters').innerHTML=apps.map(a=>
+    `<button class="fb ${ordersFilter===a?'on':''}" onclick="setOF('${a}',this)">${a==='all'?'All':a}</button>`
+  ).join('');
+}
+function setOF(f,el){ordersFilter=f;document.querySelectorAll('#orders-filters .fb').forEach(b=>b.classList.remove('on'));el.classList.add('on');renderOrders();}
+function renderOrders(q=''){
+  buildOrderFilters();
+  let list=D.orders;
+  if(ordersFilter!=='all'){
+    if(['ToB','Q'].includes(ordersFilter)) list=list.filter(o=>o.rest===ordersFilter);
+    else list=list.filter(o=>o.app===ordersFilter);
+  }
+  if(q) list=list.filter(o=>(o.items+o.notes+o.orderId).toLowerCase().includes(q.toLowerCase()));
+  const g=list.reduce((s,o)=>s+o.amount,0);
+  const n=list.reduce((s,o)=>s+net(o),0);
+  document.getElementById('orders-count').textContent=`${list.length} orders · Gross: ${fmtAED(g)} · Net: ${fmtAED(Math.round(n*100)/100)}`;
+  document.getElementById('orders-body').innerHTML=list.length?list.map((o,i)=>`
+    <tr>
+      <td style="color:var(--muted)">${i+1}</td>
+      <td>${o.date}</td><td style="color:var(--muted)">${o.time}</td>
+      <td><span class="badge b-${o.app.toLowerCase()}">${o.app}</span></td>
+      <td><span class="badge b-${o.rest.toLowerCase()}">${o.rest}</span></td>
+      <td style="max-width:220px;font-size:12px">${o.items}</td>
+      <td><b>${o.amount>0?fmtAED(o.amount):'—'}</b></td>
+      <td class="profit">${fmtAED(Math.round(net(o)*100)/100)}</td>
+      <td style="font-size:11px;color:var(--muted)">${o.orderId}</td>
+      <td style="max-width:140px;font-size:11px;color:${o.status==='complaint'?'var(--red)':'var(--muted)'}">${o.notes}</td>
+      <td><div class="row-actions"><button class="icon-btn" onclick="editOrder(${o.id})">✏️</button><button class="icon-btn del" onclick="delOrder(${o.id})">🗑</button></div></td>
+    </tr>`).join(''):`<tr><td colspan="11"><div class="empty"><div class="ei">📭</div>No orders</div></td></tr>`;
+}
+function editOrder(id){
+  const o=D.orders.find(x=>x.id===id); if(!o)return;
+  editId=id;
+  document.getElementById('o-title').textContent='Edit Order';
+  document.getElementById('o-date').value=o.date;
+  document.getElementById('o-time').value=o.time;
+  document.getElementById('o-app').value=o.app;
+  document.getElementById('o-rest').value=o.rest;
+  document.getElementById('o-amount').value=o.amount;
+  document.getElementById('o-oid').value=o.orderId;
+  document.getElementById('o-items').value=o.items;
+  document.getElementById('o-notes').value=o.notes;
+  document.getElementById('o-status').value=o.status||'completed';
+  document.getElementById('o-repeat').value=o.repeat||'';
+  openModal('o-modal');
+}
+function saveOrder(){
+  const o={date:document.getElementById('o-date').value,time:document.getElementById('o-time').value,app:document.getElementById('o-app').value,rest:document.getElementById('o-rest').value,amount:parseFloat(document.getElementById('o-amount').value)||0,orderId:document.getElementById('o-oid').value,items:document.getElementById('o-items').value,notes:document.getElementById('o-notes').value,status:document.getElementById('o-status').value,repeat:document.getElementById('o-repeat').value};
+  if(!o.date||!o.app){toast('Fill in date and app');return;}
+  if(editId){const i=D.orders.findIndex(x=>x.id===editId);D.orders[i]={...D.orders[i],...o};}
+  else{o.id=D.nextOrderId++;D.orders.push(o);}
+  save();closeModal('o-modal');renderOrders();toast('Order saved ✓');editId=null;
+}
+function delOrder(id){if(!confirm('Delete order?'))return;D.orders=D.orders.filter(o=>o.id!==id);save();renderOrders();toast('Deleted');}
+
+// ==================== KITCHEN ====================
+function setKF(f,el){kitchenFilter=f;document.querySelectorAll('#page-kitchen .fb').forEach(b=>b.classList.remove('on'));el.classList.add('on');renderKitchen();}
+function renderKitchen(){
+  let list=D.kitchen;
+  if(kitchenFilter!=='all') list=list.filter(k=>k.status===kitchenFilter);
+  document.getElementById('kitchen-body').innerHTML=list.length?list.map(k=>`
+    <tr>
+      <td><b>${k.name}</b>${k.notes?`<div style="font-size:11px;color:var(--muted)">${k.notes}</div>`:''}</td>
+      <td>${k.qty||'—'}</td>
+      <td>${k.when||'—'}</td>
+      <td>${k.cost?fmtAED(k.cost):'—'}</td>
+      <td><span class="badge ${k.status==='bought'?'b-income':'b-expense'}">${k.status==='bought'?'✅ Bought':'🔴 Need to Buy'}</span></td>
+      <td>${k.photos&&k.photos.length?`<div style="display:flex;gap:3px">${k.photos.slice(0,3).map(p=>`<img src="${p}" style="width:30px;height:30px;object-fit:cover;border-radius:4px;cursor:pointer" onclick="viewPhoto('${p}')">`).join('')}</div>`:'—'}</td>
+      <td><div class="row-actions"><button class="icon-btn" onclick="toggleK(${k.id})">${k.status==='bought'?'↩':'✓'}</button><button class="icon-btn del" onclick="delK(${k.id})">🗑</button></div></td>
+    </tr>`).join(''):`<tr><td colspan="7"><div class="empty"><div class="ei">🛒</div>No kitchen items</div></td></tr>`;
+}
+function saveKitchen(){
+  const photos=tempPhotos['k-photo-in']||[];
+  const item={name:document.getElementById('k-name').value,qty:document.getElementById('k-qty').value,when:document.getElementById('k-when').value,cost:parseFloat(document.getElementById('k-cost').value)||0,status:document.getElementById('k-status').value,notes:document.getElementById('k-notes').value,photos};
+  if(!item.name){toast('Enter item name');return;}
+  if(editId){const i=D.kitchen.findIndex(x=>x.id===editId);D.kitchen[i]={...D.kitchen[i],...item};}
+  else{item.id=D.nextKitchenId++;D.kitchen.push(item);}
+  save();closeModal('k-modal');renderKitchen();toast('Saved ✓');editId=null;tempPhotos={};
+}
+function toggleK(id){const k=D.kitchen.find(x=>x.id===id);if(!k)return;k.status=k.status==='bought'?'pending':'bought';save();renderKitchen();}
+function delK(id){if(!confirm('Delete?'))return;D.kitchen=D.kitchen.filter(k=>k.id!==id);save();renderKitchen();}
+
+// ==================== STOCK ====================
+function setSF(f,el){stockFilter=f;document.querySelectorAll('#page-stock .fb').forEach(b=>b.classList.remove('on'));el.classList.add('on');renderStock();}
+function renderStock(){
+  let list=D.stock;
+  if(stockFilter==='low') list=list.filter(s=>s.qty<=s.min);
+  if(stockFilter==='ok') list=list.filter(s=>s.qty>s.min);
+  document.getElementById('stock-grid').innerHTML=list.length?list.map(s=>{
+    const pct=s.max>0?Math.min(100,(s.qty/s.max)*100):50;
+    const isLow=s.qty<=s.min;
+    const col=isLow?'var(--red)':pct<60?'var(--accent)':'var(--green)';
+    return `<div class="si">
+      ${s.photo?`<img class="si-photo" src="${s.photo}" alt="${s.name}">`:`<div class="no-photo" onclick="editStock(${s.id})">📷</div>`}
+      <div class="sn">${s.name}</div>
+      <div class="sm">${s.unit}${s.restock?' · Last: '+s.restock:''}</div>
+      <div class="sq" style="color:${col}">${s.qty} <small style="font-size:12px;font-weight:400">${s.unit}</small></div>
+      ${s.min?`<div class="sm">Min: ${s.min} · Max: ${s.max||'?'}</div>`:''}
+      <div class="bar"><div class="bar-f" style="width:${pct}%;background:${col}"></div></div>
+      ${isLow?`<div style="color:var(--red);font-size:11px;margin-top:4px">⚠️ Low — needs restocking</div>`:''}
+      ${s.notes?`<div class="sm" style="margin-top:4px">${s.notes}</div>`:''}
+      <div style="display:flex;gap:6px;margin-top:10px">
+        <button class="icon-btn" onclick="editStock(${s.id})" style="flex:1;width:auto">✏️</button>
+        <button class="icon-btn del" onclick="delStock(${s.id})" style="flex:1;width:auto">🗑</button>
+      </div></div>`;
+  }).join(''):`<div class="empty" style="grid-column:1/-1"><div class="ei">📦</div>No stock items yet</div>`;
+}
+function editStock(id){
+  const s=D.stock.find(x=>x.id===id); if(!s)return;
+  editId=id;
+  document.getElementById('s-name').value=s.name;
+  document.getElementById('s-qty').value=s.qty;
+  document.getElementById('s-unit').value=s.unit;
+  document.getElementById('s-min').value=s.min;
+  document.getElementById('s-max').value=s.max;
+  document.getElementById('s-cost').value=s.cost;
+  document.getElementById('s-restock').value=s.restock||'';
+  document.getElementById('s-notes').value=s.notes||'';
+  openModal('s-modal');
+}
+function saveStock(){
+  const photo=tempPhotos['s-photo-in']&&tempPhotos['s-photo-in'][0]?tempPhotos['s-photo-in'][0]:null;
+  const item={name:document.getElementById('s-name').value,qty:parseFloat(document.getElementById('s-qty').value)||0,unit:document.getElementById('s-unit').value,min:parseFloat(document.getElementById('s-min').value)||0,max:parseFloat(document.getElementById('s-max').value)||0,cost:parseFloat(document.getElementById('s-cost').value)||0,restock:document.getElementById('s-restock').value,notes:document.getElementById('s-notes').value};
+  if(!item.name){toast('Enter item name');return;}
+  if(editId){const i=D.stock.findIndex(x=>x.id===editId);D.stock[i]={...D.stock[i],...item,photo:photo||D.stock[i].photo};}
+  else{item.id=D.nextStockId++;item.photo=photo;D.stock.push(item);}
+  save();closeModal('s-modal');renderStock();toast('Saved ✓');editId=null;tempPhotos={};
+}
+function delStock(id){if(!confirm('Delete?'))return;D.stock=D.stock.filter(s=>s.id!==id);save();renderStock();}
+
+// ==================== BANK ====================
+function setTF(f,el){txFilter=f;document.querySelectorAll('#page-bank .fb').forEach(b=>b.classList.remove('on'));el.classList.add('on');renderBank();}
+function renderBank(){
+  let list=D.transactions;
+  if(txFilter==='income') list=list.filter(t=>t.type==='income');
+  if(txFilter==='expense') list=list.filter(t=>t.type==='expense');
+  const totalIn=D.transactions.filter(t=>t.type==='income').reduce((s,t)=>s+t.amount,0);
+  const totalOut=D.transactions.filter(t=>t.type==='expense').reduce((s,t)=>s+t.amount,0);
+  document.getElementById('bank-stats').innerHTML=[
+    {l:'Capital Invested',v:fmtAED(totalIn),s:'Transfers in (not counted as profit)',c:'blue'},
+    {l:'Total Expenses',v:fmtAED(totalOut),s:'All business spending',c:'red'},
+  ].map(s=>`<div class="stat ${s.c}"><div class="sl">${s.l}</div><div class="sv">${s.v}</div><div class="ss">${s.s}</div></div>`).join('');
+  document.getElementById('bank-body').innerHTML=list.map(t=>`
+    <tr>
+      <td>${t.date}</td>
+      <td style="color:var(--muted);font-size:12px">${t.time}</td>
+      <td><b>${t.desc}</b>${t.notes?`<div style="font-size:11px;color:var(--muted)">${t.notes}</div>`:''}</td>
+      <td class="${t.type==='income'?'profit':'loss'}"><b>${t.type==='income'?'+':'-'}${fmtAED(t.amount)}</b></td>
+      <td><span class="badge b-${t.type==='income'?'income':'expense'}">${t.type==='income'?'Capital In':'Expense'}</span></td>
+      <td style="font-size:12px;color:var(--muted)">${t.cat}</td>
+      <td style="font-size:12px;color:var(--muted)">${t.paid||'—'}</td>
+      <td><div class="row-actions"><button class="icon-btn" onclick="editTx(${t.id})">✏️</button><button class="icon-btn del" onclick="delTx(${t.id})">🗑</button></div></td>
+    </tr>`).join('');
+}
+function editTx(id){
+  const t=D.transactions.find(x=>x.id===id);if(!t)return;
+  editId=id;
+  document.getElementById('tx-date').value=t.date;
+  document.getElementById('tx-time').value=t.time;
+  document.getElementById('tx-desc').value=t.desc;
+  document.getElementById('tx-amt').value=t.amount;
+  document.getElementById('tx-type').value=t.type==='income'?'income':'expense';
+  document.getElementById('tx-cat').value=t.cat;
+  document.getElementById('tx-paid').value=t.paid||'';
+  document.getElementById('tx-notes').value=t.notes;
+  openModal('tx-modal');
+}
+function saveTx(){
+  const t={date:document.getElementById('tx-date').value,time:document.getElementById('tx-time').value,desc:document.getElementById('tx-desc').value,amount:parseFloat(document.getElementById('tx-amt').value)||0,type:document.getElementById('tx-type').value,cat:document.getElementById('tx-cat').value,paid:document.getElementById('tx-paid').value,notes:document.getElementById('tx-notes').value};
+  if(!t.date||!t.desc){toast('Fill in date and description');return;}
+  if(editId){const i=D.transactions.findIndex(x=>x.id===editId);D.transactions[i]={...D.transactions[i],...t};}
+  else{t.id=D.nextTxId++;D.transactions.push(t);}
+  save();closeModal('tx-modal');renderBank();toast('Saved ✓');editId=null;
+}
+function delTx(id){if(!confirm('Delete?'))return;D.transactions=D.transactions.filter(t=>t.id!==id);save();renderBank();}
+
+// ==================== RECEIPTS ====================
+function renderReceipts(){
+  document.getElementById('receipts-body').innerHTML=D.receipts.length?D.receipts.map(r=>`
+    <tr>
+      <td>${r.date}</td><td><b>${r.vendor}</b></td>
+      <td>${fmtAED(r.amount)}</td>
+      <td><span class="badge b-expense">${r.cat}</span></td>
+      <td>${r.photos&&r.photos.length?`<div style="display:flex;gap:3px">${r.photos.slice(0,3).map(p=>`<img src="${p}" style="width:32px;height:32px;object-fit:cover;border-radius:4px;cursor:pointer" onclick="viewPhoto('${p}')">`).join('')}</div>`:'—'}</td>
+      <td style="font-size:12px;color:var(--muted)">${r.notes||'—'}</td>
+      <td><button class="icon-btn del" onclick="delReceipt(${r.id})">🗑</button></td>
+    </tr>`).join(''):`<tr><td colspan="7"><div class="empty"><div class="ei">🗂️</div>No receipts yet</div></td></tr>`;
+}
+function saveReceipt(){
+  const photos=tempPhotos['r-photo-in']||[];
+  const r={id:D.nextReceiptId++,date:document.getElementById('r-date').value,vendor:document.getElementById('r-vendor').value,amount:parseFloat(document.getElementById('r-amt').value)||0,cat:document.getElementById('r-cat').value,notes:document.getElementById('r-notes').value,photos};
+  if(!r.vendor){toast('Enter vendor name');return;}
+  D.receipts.push(r);save();closeModal('r-modal');renderReceipts();toast('Receipt saved ✓');tempPhotos={};
+}
+function delReceipt(id){if(!confirm('Delete?'))return;D.receipts=D.receipts.filter(r=>r.id!==id);save();renderReceipts();}
+
+// ==================== P&L ====================
+function renderPnL(){
+  const orders=D.orders.filter(o=>o.amount>0);
+  const netRev=orders.reduce((s,o)=>s+net(o),0);
+  const exp=D.transactions.filter(t=>t.type==='expense').reduce((s,t)=>s+t.amount,0);
+  const cap=D.transactions.filter(t=>t.type==='income').reduce((s,t)=>s+t.amount,0);
+  const pnl=netRev-exp;
+  document.getElementById('pnl-stats').innerHTML=[
+    {l:'Net Delivery Revenue',v:fmtAED(Math.round(netRev*100)/100),s:'After all app commissions',c:'green'},
+    {l:'Total Expenses',v:fmtAED(exp),s:'All business costs',c:'red'},
+    {l:'Capital Invested',v:fmtAED(cap),s:'Not counted as profit',c:'blue'},
+    {l:'Final P&L',v:(pnl>=0?'+':'')+fmtAED(Math.round(pnl*100)/100),s:'Net revenue − expenses',c:pnl>=0?'green':'red'},
+  ].map(s=>`<div class="stat ${s.c}"><div class="sl">${s.l}</div><div class="sv">${s.v}</div><div class="ss">${s.s}</div></div>`).join('');
+
+  const apps=['Talabat','Deliveroo','Careem','Keeta','Noon','Whatsapp'];
+  document.getElementById('pnl-rev').innerHTML=`<table><thead><tr><th>App</th><th>Orders</th><th>Gross</th><th>Fee</th><th>Net</th></tr></thead><tbody>${
+    [...apps.map(a=>{
+      const ao=orders.filter(o=>o.app===a);if(!ao.length)return '';
+      const g=ao.reduce((s,o)=>s+o.amount,0);const n=ao.reduce((s,o)=>s+net(o),0);
+      const pctStr=a==='Talabat'?`${D.settings.talabatTob}%ToB/${D.settings.talabatQ}%Q`:(D.settings[a.toLowerCase()]||0)+'%';
+      return `<tr><td><span class="badge b-${a.toLowerCase()}">${a}</span></td><td>${ao.length}</td><td>${fmtAED(g)}</td><td style="font-size:11px;color:var(--muted)">${pctStr}</td><td class="profit">${fmtAED(Math.round(n*100)/100)}</td></tr>`;
+    }),
+    [`<tr style="border-top:2px solid var(--border);font-weight:600"><td>TOTAL</td><td>${orders.length}</td><td>${fmtAED(orders.reduce((s,o)=>s+o.amount,0))}</td><td>—</td><td class="profit">${fmtAED(Math.round(netRev*100)/100)}</td></tr>`]
+  ].join('')}</tbody></table>`;
+
+  const cats={};D.transactions.filter(t=>t.type==='expense').forEach(t=>cats[t.cat]=(cats[t.cat]||0)+t.amount);
+  document.getElementById('pnl-exp').innerHTML=`<table><thead><tr><th>Category</th><th>Amount</th></tr></thead><tbody>${
+    Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([c,a])=>`<tr><td>${c}</td><td class="loss">${fmtAED(Math.round(a*100)/100)}</td></tr>`).join('')
+  }<tr style="border-top:2px solid var(--border);font-weight:600"><td>TOTAL</td><td class="loss">${fmtAED(Math.round(exp*100)/100)}</td></tr></tbody></table>`;
+
+  const byDate={};orders.forEach(o=>{if(!byDate[o.date])byDate[o.date]={g:0,n:0,c:0};byDate[o.date].g+=o.amount;byDate[o.date].n+=net(o);byDate[o.date].c++;});
+  document.getElementById('pnl-daily').innerHTML=`<table><thead><tr><th>Date</th><th>Orders</th><th>Gross</th><th>Net Revenue</th></tr></thead><tbody>${
+    Object.entries(byDate).sort().map(([d,v])=>`<tr><td>${d}</td><td>${v.c}</td><td>${fmtAED(v.g)}</td><td class="profit">${fmtAED(Math.round(v.n*100)/100)}</td></tr>`).join('')
+  }</tbody></table>`;
+}
+
+// ==================== SETTINGS ====================
+function loadSettings(){
+  document.getElementById('pct-talabat-tob').value=D.settings.talabatTob;
+  document.getElementById('pct-talabat-q').value=D.settings.talabatQ;
+  document.getElementById('pct-deliveroo').value=D.settings.deliveroo;
+  document.getElementById('pct-careem').value=D.settings.careem;
+  document.getElementById('pct-keeta').value=D.settings.keeta;
+  document.getElementById('pct-noon').value=D.settings.noon;
+  document.getElementById('pct-whatsapp').value=D.settings.whatsapp;
+  document.getElementById('gist-token').value=D.gist.token||'';
+  document.getElementById('gist-id').value=D.gist.id||'';
+}
+function saveSettings(){
+  D.settings.talabatTob=parseFloat(document.getElementById('pct-talabat-tob').value)||0;
+  D.settings.talabatQ=parseFloat(document.getElementById('pct-talabat-q').value)||0;
+  D.settings.deliveroo=parseFloat(document.getElementById('pct-deliveroo').value)||0;
+  D.settings.careem=parseFloat(document.getElementById('pct-careem').value)||0;
+  D.settings.keeta=parseFloat(document.getElementById('pct-keeta').value)||0;
+  D.settings.noon=parseFloat(document.getElementById('pct-noon').value)||0;
+  D.settings.whatsapp=parseFloat(document.getElementById('pct-whatsapp').value)||0;
+  save();toast('Rates updated ✓');
+}
+function saveGistConfig(){
+  D.gist.token=document.getElementById('gist-token').value.trim();
+  D.gist.id=document.getElementById('gist-id').value.trim();
+  save();
+}
+
+// ==================== GIST SYNC ====================
+async function pushToGist(){
+  const token=D.gist.token;
+  if(!token){toast('Enter GitHub token first');return;}
+  const payload=JSON.parse(JSON.stringify(D));
+  delete payload.gist; // don't sync token
+  const body={description:"Taste of Baku Business Data",public:false,files:{"tob-data.json":{content:JSON.stringify(payload,null,2)}}};
+  try{
+    let url='https://api.github.com/gists';
+    let method='POST';
+    if(D.gist.id){url+='/'+D.gist.id;method='PATCH';}
+    const res=await fetch(url,{method,headers:{'Authorization':'token '+token,'Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(!res.ok) throw new Error(await res.text());
+    const data=await res.json();
+    D.gist.id=data.id;
+    document.getElementById('gist-id').value=data.id;
+    save();
+    document.getElementById('gist-status').textContent='✅ Pushed at '+new Date().toLocaleTimeString();
+    setSyncBar('✅ Synced to cloud','ok');
+    toast('Pushed to cloud ✓');
+  }catch(e){document.getElementById('gist-status').textContent='❌ Error: '+e.message;toast('Push failed');}
+}
+async function pullFromGist(){
+  const token=D.gist.token, id=D.gist.id;
+  if(!token||!id){toast('Enter token and Gist ID first');return;}
+  try{
+    const res=await fetch('https://api.github.com/gists/'+id,{headers:{'Authorization':'token '+token}});
+    if(!res.ok) throw new Error(await res.text());
+    const data=await res.json();
+    const content=data.files['tob-data.json'].content;
+    const pulled=JSON.parse(content);
+    pulled.gist={token:D.gist.token,id:D.gist.id}; // keep local creds
+    D=pulled;save();
+    renderDash();loadSettings();
+    document.getElementById('gist-status').textContent='✅ Pulled at '+new Date().toLocaleTimeString();
+    setSyncBar('✅ Synced from cloud','ok');
+    toast('Pulled from cloud ✓');
+  }catch(e){document.getElementById('gist-status').textContent='❌ Error: '+e.message;toast('Pull failed');}
+}
+function setSyncBar(msg,cls){const b=document.getElementById('sync-bar');b.textContent=msg;b.className='sync-bar '+cls;}
+
+// ==================== PHOTOS ====================
+function previewPhotos(inputId,previewId,max){
+  const input=document.getElementById(inputId);
+  const preview=document.getElementById(previewId);
+  if(!tempPhotos[inputId]) tempPhotos[inputId]=[];
+  Array.from(input.files).forEach(file=>{
+    if(max&&tempPhotos[inputId].length>=max)return;
+    const reader=new FileReader();
+    reader.onload=e=>{
+      tempPhotos[inputId].push(e.target.result);
+      const div=document.createElement('div');div.className='pi';
+      div.innerHTML=`<img src="${e.target.result}"><button class="pd" onclick="removePhoto('${inputId}','${previewId}',this)">×</button>`;
+      preview.appendChild(div);
+    };reader.readAsDataURL(file);
+  });
+}
+function removePhoto(inputId,previewId,btn){
+  const item=btn.parentElement;
+  const src=item.querySelector('img').src;
+  tempPhotos[inputId]=(tempPhotos[inputId]||[]).filter(p=>p!==src);
+  item.remove();
+}
+function viewPhoto(src){
+  const o=document.createElement('div');
+  o.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:500;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:16px';
+  o.innerHTML=`<img src="${src}" style="max-width:100%;max-height:100%;border-radius:8px">`;
+  o.onclick=()=>document.body.removeChild(o);document.body.appendChild(o);
+}
+
+// ==================== MODALS ====================
+function openModal(id){
+  document.getElementById(id).classList.add('open');
+  if(id==='o-modal'&&!editId){document.getElementById('o-title').textContent='Add Order';document.getElementById('o-date').value=new Date().toISOString().split('T')[0];}
+  if(id==='tx-modal'&&!editId) document.getElementById('tx-date').value=new Date().toISOString().split('T')[0];
+  if(id==='r-modal') document.getElementById('r-date').value=new Date().toISOString().split('T')[0];
+  if(id==='k-modal'&&!editId) document.getElementById('k-when').value=new Date().toISOString().split('T')[0];
+}
+function closeModal(id){
+  document.getElementById(id).classList.remove('open');
+  editId=null;tempPhotos={};
+  document.querySelectorAll('.pg').forEach(p=>p.innerHTML='');
+}
+document.querySelectorAll('.overlay').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open')}));
+
+// ==================== EXPORT/IMPORT ====================
+function exportJSON(){
+  const blob=new Blob([JSON.stringify(D,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='taste-of-baku-data.json';a.click();
+  toast('Exported ✓');
+}
+function importJSON(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    try{
+      const imported=JSON.parse(ev.target.result);
+      if(!imported.gist) imported.gist={token:D.gist.token||'',id:D.gist.id||''};
+      D=imported;save();renderDash();loadSettings();toast('Imported ✓');
+    }catch{toast('Invalid JSON file');}
+  };reader.readAsText(file);
+}
+
+// ==================== TOAST ====================
+function toast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// ==================== INIT ====================
+renderDash();
+buildOrderFilters();
+</script>
 </body>
 </html>
